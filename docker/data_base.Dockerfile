@@ -9,6 +9,6 @@ COPY docker/init-db.sh /docker-entrypoint-initdb.d/01_init-db.sh
 
 RUN chmod +x /docker-entrypoint-initdb.d/01_init-db.sh
 
-VOLUME ["/var/lib/postgresql/data"]
+VOLUME ["/var/lib/postgresql"]
 
 EXPOSE 5432

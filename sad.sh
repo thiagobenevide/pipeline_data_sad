@@ -35,7 +35,7 @@ case "$1" in
     docker run -d \
       --name $CONTAINER_NAME \
       -p $WG_IP:$HOST_PORT:$CONTAINER_PORT \
-      -v $VOLUME_NAME:/var/lib/postgresql/data \
+      -v $VOLUME_NAME:/var/lib/postgresql \
       --env-file .env \
       --restart unless-stopped \
       $IMAGE_NAME
