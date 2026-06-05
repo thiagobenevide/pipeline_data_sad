@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <transformation>
   <info>
-    <name>dim_local</name>
+    <name>dim_cartao</name>
     <description/>
     <extended_description/>
     <trans_version/>
@@ -427,23 +427,23 @@
     <clusterschemas>
     </clusterschemas>
     <created_user>-</created_user>
-    <created_date>2026/06/03 18:31:57.386</created_date>
+    <created_date>2026/06/03 19:06:01.202</created_date>
     <modified_user>-</modified_user>
-    <modified_date>2026/06/03 18:31:57.386</modified_date>
-    <key_for_session_key>H4sIAAAAAAAA/wMAAAAAAAAAAAA=</key_for_session_key>
+    <modified_date>2026/06/03 19:06:01.202</modified_date>
+    <key_for_session_key/>
     <is_key_private>N</is_key_private>
   </info>
   <notepads>
   </notepads>
   <connection>
-    <name>BCDB</name>
-    <server>localhost</server>
+    <name>Banco SAD</name>
+    <server>${DB_HOST_SAD}</server>
     <type>POSTGRESQL</type>
     <access>Native</access>
-    <database>bcbdb</database>
-    <port>5432</port>
-    <username>postgres</username>
-    <password>Encrypted 2be98afc86aa7f2e4cb79ff228dc6fa8c</password>
+    <database>${DB_NAME_SAD}</database>
+    <port>${DB_PORT_SAD}</port>
+    <username>${DB_USER_SAD}</username>
+    <password>${DB_PASSWORD_SAD}</password>
     <servername/>
     <data_tablespace/>
     <index_tablespace/>
@@ -462,7 +462,7 @@
       </attribute>
       <attribute>
         <code>PORT_NUMBER</code>
-        <attribute>5432</attribute>
+        <attribute>${DB_PORT_SAD}</attribute>
       </attribute>
       <attribute>
         <code>PRESERVE_RESERVED_WORD_CASE</code>
@@ -504,7 +504,7 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <filename>C:\Users\Guilherme\Downloads\estados_brasil.csv</filename>
+    <filename>C:\Users\Guilherme\Downloads\cartoes.csv</filename>
     <filename_field/>
     <rownum_field/>
     <include_filename>N</include_filename>
@@ -520,18 +520,29 @@
     <encoding/>
     <fields>
       <field>
-        <name>loc_uf</name>
+        <name>car_bandeira</name>
         <type>String</type>
         <format/>
         <currency>$</currency>
         <decimal>.</decimal>
         <group>,</group>
-        <length>2</length>
+        <length>10</length>
         <precision>-1</precision>
         <trim_type>none</trim_type>
       </field>
       <field>
-        <name>loc_estado</name>
+        <name>car_funcao</name>
+        <type>String</type>
+        <format/>
+        <currency>$</currency>
+        <decimal>.</decimal>
+        <group>,</group>
+        <length>7</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
+        <name>car_produto</name>
         <type>String</type>
         <format/>
         <currency>$</currency>
@@ -542,46 +553,24 @@
         <trim_type>none</trim_type>
       </field>
       <field>
-        <name>loc_latidude</name>
-        <type>Number</type>
-        <format>#.#</format>
-        <currency>$</currency>
-        <decimal>.</decimal>
-        <group>,</group>
-        <length>6</length>
-        <precision>2</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>loc_longitude</name>
-        <type>Number</type>
-        <format>#.#</format>
-        <currency>$</currency>
-        <decimal>.</decimal>
-        <group>,</group>
-        <length>6</length>
-        <precision>2</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>loc_cod_ibge</name>
-        <type>Integer</type>
-        <format>#</format>
-        <currency>$</currency>
-        <decimal>.</decimal>
-        <group>,</group>
-        <length>15</length>
-        <precision>0</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>loc_regicao</name>
+        <name>car_modalidade</name>
         <type>String</type>
         <format/>
         <currency>$</currency>
         <decimal>.</decimal>
         <group>,</group>
-        <length>8</length>
+        <length>9</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
+        <name>car_numero_parcela</name>
+        <type>String</type>
+        <format/>
+        <currency>$</currency>
+        <decimal>.</decimal>
+        <group>,</group>
+        <length>6</length>
         <precision>-1</precision>
         <trim_type>none</trim_type>
       </field>
@@ -595,7 +584,7 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>400</xloc>
+      <xloc>368</xloc>
       <yloc>288</yloc>
       <draw>Y</draw>
     </GUI>
@@ -611,9 +600,9 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <connection>BCDB</connection>
+    <connection>Banco SAD</connection>
     <schema>public</schema>
-    <table>dim_local</table>
+    <table>dim_cartao</table>
     <commit>1000</commit>
     <truncate>N</truncate>
     <ignore_errors>N</ignore_errors>
@@ -630,28 +619,24 @@
     <return_field/>
     <fields>
       <field>
-        <column_name>loc_uf</column_name>
-        <stream_name>loc_uf</stream_name>
+        <column_name>car_bandeira</column_name>
+        <stream_name>car_bandeira</stream_name>
       </field>
       <field>
-        <column_name>loc_estado</column_name>
-        <stream_name>loc_estado</stream_name>
+        <column_name>car_funcao</column_name>
+        <stream_name>car_funcao</stream_name>
       </field>
       <field>
-        <column_name>loc_latidude</column_name>
-        <stream_name>loc_latidude</stream_name>
+        <column_name>car_produto</column_name>
+        <stream_name>car_produto</stream_name>
       </field>
       <field>
-        <column_name>loc_longitude</column_name>
-        <stream_name>loc_longitude</stream_name>
+        <column_name>car_modalidade</column_name>
+        <stream_name>car_modalidade</stream_name>
       </field>
       <field>
-        <column_name>loc_cod_ibge</column_name>
-        <stream_name>loc_cod_ibge</stream_name>
-      </field>
-      <field>
-        <column_name>loc_regicao</column_name>
-        <stream_name>loc_regicao</stream_name>
+        <column_name>car_numero_parcela</column_name>
+        <stream_name>car_numero_parcela</stream_name>
       </field>
     </fields>
     <attributes/>
@@ -663,7 +648,7 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>560</xloc>
+      <xloc>544</xloc>
       <yloc>288</yloc>
       <draw>Y</draw>
     </GUI>
