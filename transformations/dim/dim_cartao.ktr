@@ -429,8 +429,8 @@
     <created_user>-</created_user>
     <created_date>2026/06/03 19:06:01.202</created_date>
     <modified_user>-</modified_user>
-    <modified_date>2026/06/03 19:06:01.202</modified_date>
-    <key_for_session_key/>
+    <modified_date>2026/06/06 00:00:00.000</modified_date>
+    <key_for_session_key>H4sIAAAAAAAAAAMAAAAAAAAAAAA=</key_for_session_key>
     <is_key_private>N</is_key_private>
   </info>
   <notepads>
@@ -488,14 +488,94 @@
   </connection>
   <order>
     <hop>
-      <from>CSV file input</from>
-      <to>Table output</to>
+      <from>Gera Periodos - 60 Linhas</from>
+      <to>Sequence - Indice</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Sequence - Indice</from>
+      <to>JavaScript - Calcula Periodo</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>JavaScript - Calcula Periodo</from>
+      <to>Filter - Apenas Periodos Validos</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Filter - Apenas Periodos Validos</from>
+      <to>Calculator - Monta URL</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Calculator - Monta URL</from>
+      <to>REST Client - BCB API</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>REST Client - BCB API</from>
+      <to>JSON Input - Parseia Response</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>JSON Input - Parseia Response</from>
+      <to>Select Values - Renomeia Campos</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Select Values - Renomeia Campos</from>
+      <to>Sort Rows - Para Unique</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Sort Rows - Para Unique</from>
+      <to>Unique Rows - Deduplica</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Unique Rows - Deduplica</from>
+      <to>Database Lookup - Verifica Existente</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Database Lookup - Verifica Existente</from>
+      <to>Filter - Apenas Novos DC</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Filter - Apenas Novos DC</from>
+      <to>Table Output - dim_cartao</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Unique Rows - Deduplica</from>
+      <to>Select Values - Renomeia Campos dim_bandeira</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Select Values - Renomeia Campos dim_bandeira</from>
+      <to>Unique Rows - Remover a Duplicação</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Unique Rows - Remover a Duplicação</from>
+      <to>Database Lookup - Verifica Existente DB</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Database Lookup - Verifica Existente DB</from>
+      <to>Filter - Apenas Novos DB</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Filter - Apenas Novos DB</from>
+      <to>Table Output - dim_cartao_tipo</to>
       <enabled>Y</enabled>
     </hop>
   </order>
   <step>
-    <name>CSV file input</name>
-    <type>CsvInput</type>
+    <name>Calculator - Monta URL</name>
+    <type>ScriptValueMod</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -504,75 +584,32 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <filename>C:\Users\Guilherme\Downloads\cartoes.csv</filename>
-    <filename_field/>
-    <rownum_field/>
-    <include_filename>N</include_filename>
-    <separator>;</separator>
-    <enclosure>"</enclosure>
-    <header>Y</header>
-    <buffer_size>50000</buffer_size>
-    <lazy_conversion>Y</lazy_conversion>
-    <add_filename_result>N</add_filename_result>
-    <parallel>N</parallel>
-    <newline_possible>N</newline_possible>
-    <format>mixed</format>
-    <encoding/>
+    <compatible>Y</compatible>
+    <optimizationLevel>9</optimizationLevel>
+    <jsScripts>
+      <jsScript>
+        <jsScript_type>0</jsScript_type>
+        <jsScript_name>Script 1</jsScript_name>
+        <jsScript_script>
+var p = periodo + "";
+var url_completa =
+  "https://olinda.bcb.gov.br/olinda/servico/MPV_DadosAbertos/versao/v1/odata/" +
+  "Quantidadeetransacoesdecartoes(trimestre=@trimestre)" +
+  "?@trimestre='" + p + "'" +
+  "&amp;$format=json" +
+  "&amp;$top=10000" +
+  "&amp;$filter=trimestre%20eq%20'" + p + "'";
+        </jsScript_script>
+      </jsScript>
+    </jsScripts>
     <fields>
       <field>
-        <name>car_bandeira</name>
+        <name>url_completa</name>
+        <rename>url_completa</rename>
         <type>String</type>
-        <format/>
-        <currency>$</currency>
-        <decimal>.</decimal>
-        <group>,</group>
-        <length>10</length>
+        <length>-1</length>
         <precision>-1</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>car_funcao</name>
-        <type>String</type>
-        <format/>
-        <currency>$</currency>
-        <decimal>.</decimal>
-        <group>,</group>
-        <length>7</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>car_produto</name>
-        <type>String</type>
-        <format/>
-        <currency>$</currency>
-        <decimal>.</decimal>
-        <group>,</group>
-        <length>8</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>car_modalidade</name>
-        <type>String</type>
-        <format/>
-        <currency>$</currency>
-        <decimal>.</decimal>
-        <group>,</group>
-        <length>9</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>car_numero_parcela</name>
-        <type>String</type>
-        <format/>
-        <currency>$</currency>
-        <decimal>.</decimal>
-        <group>,</group>
-        <length>6</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
+        <replace>N</replace>
       </field>
     </fields>
     <attributes/>
@@ -584,13 +621,725 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>368</xloc>
-      <yloc>288</yloc>
+      <xloc>720</xloc>
+      <yloc>240</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Table output</name>
+    <name>Database Lookup - Verifica Existente</name>
+    <type>DBLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>Banco SAD</connection>
+    <cache>N</cache>
+    <cache_load_all>N</cache_load_all>
+    <cache_size>0</cache_size>
+    <lookup>
+      <schema>dm_financeiro</schema>
+      <table>dim_cartao</table>
+      <orderby/>
+      <fail_on_multiple>N</fail_on_multiple>
+      <eat_row_on_failure>N</eat_row_on_failure>
+      <key>
+        <name>car_bandeira</name>
+        <field>car_bandeira</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <key>
+        <name>car_funcao</name>
+        <field>car_funcao</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <key>
+        <name>car_produto</name>
+        <field>car_produto</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <key>
+        <name>car_modalidade</name>
+        <field>car_modalidade</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>car_bandeira</name>
+        <rename>existe_flag</rename>
+        <default/>
+        <type>String</type>
+      </value>
+    </lookup>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>720</xloc>
+      <yloc>400</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Database Lookup - Verifica Existente DB</name>
+    <type>DBLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>Banco SAD</connection>
+    <cache>N</cache>
+    <cache_load_all>N</cache_load_all>
+    <cache_size>0</cache_size>
+    <lookup>
+      <schema>dm_financeiro</schema>
+      <table>dim_cartao_tipo</table>
+      <orderby/>
+      <fail_on_multiple>N</fail_on_multiple>
+      <eat_row_on_failure>N</eat_row_on_failure>
+      <key>
+        <name>ct_bandeira</name>
+        <field>ct_bandeira</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <key>
+        <name>ct_funcao</name>
+        <field>ct_funcao</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>ct_bandeira</name>
+        <rename>existe_flag_ct</rename>
+        <default/>
+        <type>String</type>
+      </value>
+    </lookup>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>512</xloc>
+      <yloc>576</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Filter - Apenas Novos DB</name>
+    <type>FilterRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <send_true_to>Table Output - dim_cartao_tipo</send_true_to>
+    <send_false_to/>
+    <compare>
+      <condition>
+        <negated>N</negated>
+        <leftvalue>existe_flag_ct</leftvalue>
+        <function>IS NULL</function>
+        <rightvalue/>
+      </condition>
+    </compare>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>320</xloc>
+      <yloc>576</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Filter - Apenas Novos DC</name>
+    <type>FilterRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <send_true_to>Table Output - dim_cartao</send_true_to>
+    <send_false_to/>
+    <compare>
+      <condition>
+        <negated>N</negated>
+        <leftvalue>existe_flag</leftvalue>
+        <function>IS NULL</function>
+        <rightvalue/>
+      </condition>
+    </compare>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>480</xloc>
+      <yloc>400</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Filter - Apenas Periodos Validos</name>
+    <type>FilterRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <send_true_to>Calculator - Monta URL</send_true_to>
+    <send_false_to/>
+    <compare>
+      <condition>
+        <negated>N</negated>
+        <leftvalue>manter</leftvalue>
+        <function>=</function>
+        <rightvalue/>
+        <value>
+          <name>constant</name>
+          <type>String</type>
+          <text>S</text>
+          <length>-1</length>
+          <precision>-1</precision>
+          <isnull>N</isnull>
+          <mask/>
+        </value>
+      </condition>
+    </compare>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>560</xloc>
+      <yloc>240</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Gera Periodos - 60 Linhas</name>
+    <type>RowGenerator</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+    </fields>
+    <limit>60</limit>
+    <never_ending>N</never_ending>
+    <interval_in_ms>5000</interval_in_ms>
+    <row_time_field>now</row_time_field>
+    <last_time_field>FiveSecondsAgo</last_time_field>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>80</xloc>
+      <yloc>240</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>JSON Input - Parseia Response</name>
+    <type>JsonInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <include>N</include>
+    <include_field/>
+    <rownum>N</rownum>
+    <addresultfile>N</addresultfile>
+    <readurl>N</readurl>
+    <removeSourceField>N</removeSourceField>
+    <IsIgnoreEmptyFile>Y</IsIgnoreEmptyFile>
+    <doNotFailIfNoFile>Y</doNotFailIfNoFile>
+    <ignoreMissingPath>Y</ignoreMissingPath>
+    <defaultPathLeafToNull>Y</defaultPathLeafToNull>
+    <includeNulls>N</includeNulls>
+    <rownum_field/>
+    <file>
+      <name/>
+      <filemask/>
+      <exclude_filemask/>
+      <file_required/>
+      <include_subfolders/>
+    </file>
+    <fields>
+      <field>
+        <name>nomeBandeira</name>
+        <path>$.value[*].nomeBandeira</path>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>nomeFuncao</name>
+        <path>$.value[*].nomeFuncao</path>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>produto</name>
+        <path>$.value[*].produto</path>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>modalidade</name>
+        <path>$.value[*].modalidade</path>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+    </fields>
+    <limit>0</limit>
+    <IsInFields>Y</IsInFields>
+    <IsAFile>N</IsAFile>
+    <valueField>api_response</valueField>
+    <shortFileFieldName/>
+    <pathFieldName/>
+    <hiddenFieldName/>
+    <lastModificationTimeFieldName/>
+    <uriNameFieldName/>
+    <rootUriNameFieldName/>
+    <extensionFieldName/>
+    <sizeFieldName/>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>1008</xloc>
+      <yloc>240</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>JavaScript - Calcula Periodo</name>
+    <type>ScriptValueMod</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <compatible>Y</compatible>
+    <optimizationLevel>9</optimizationLevel>
+    <jsScripts>
+      <jsScript>
+        <jsScript_type>0</jsScript_type>
+        <jsScript_name>Script 1</jsScript_name>
+        <jsScript_script>
+// seq 0 = 20191, seq 1 = 20192, seq 2 = 20193, seq 3 = 20194, seq 4 = 20201, ...
+var s = parseInt(seq);
+var ano = 2019 + Math.floor(s / 4);
+var trimestre = (s % 4) + 1;
+var periodo = "" + ano + trimestre;
+
+// Trimestre alvo: anterior ao atual (API disponibiliza com ~2 meses de atraso)
+var d = new Date();
+var curY = d.getFullYear();
+var curM = d.getMonth() + 1;
+var curQ = Math.ceil(curM / 3);
+var tQ = curQ - 1;
+var tY = curY;
+if (tQ &lt; 1) { tQ = 4; tY = curY - 1; }
+var periodo_alvo = "" + tY + tQ;
+
+// manter = "S" somente se este periodo estiver dentro do intervalo valido
+var manter = (periodo &lt;= periodo_alvo) ? "S" : "N";
+        </jsScript_script>
+      </jsScript>
+    </jsScripts>
+    <fields>
+      <field>
+        <name>periodo</name>
+        <rename>periodo</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>
+      <field>
+        <name>manter</name>
+        <rename>manter</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>400</xloc>
+      <yloc>240</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>REST Client - BCB API</name>
+    <type>Rest</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <applicationType>JSON</applicationType>
+    <method>GET</method>
+    <url/>
+    <urlInField>Y</urlInField>
+    <dynamicMethod>N</dynamicMethod>
+    <methodFieldName/>
+    <urlField>url_completa</urlField>
+    <bodyField/>
+    <httpLogin/>
+    <httpPassword>Encrypted </httpPassword>
+    <proxyHost/>
+    <proxyPort/>
+    <preemptive>N</preemptive>
+    <trustStoreFile/>
+    <trustStorePassword>Encrypted </trustStorePassword>
+    <headers>
+      </headers>
+    <parameters>
+      </parameters>
+    <matrixParameters>
+      </matrixParameters>
+    <result>
+      <name>api_response</name>
+      <code>http_status</code>
+      <response_time/>
+      <response_header/>
+    </result>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>848</xloc>
+      <yloc>240</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Select Values - Renomeia Campos</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <field>
+        <name>nomeBandeira</name>
+        <rename>car_bandeira</rename>
+      </field>
+      <field>
+        <name>nomeFuncao</name>
+        <rename>car_funcao</rename>
+      </field>
+      <field>
+        <name>produto</name>
+        <rename>car_produto</rename>
+      </field>
+      <field>
+        <name>modalidade</name>
+        <rename>car_modalidade</rename>
+      </field>
+      <select_unspecified>N</select_unspecified>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>1200</xloc>
+      <yloc>240</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Select Values - Renomeia Campos dim_bandeira</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <select_unspecified>N</select_unspecified>
+      <remove>
+        <name>car_produto</name>
+      </remove>
+      <remove>
+        <name>car_modalidade</name>
+      </remove>
+      <meta>
+        <name>car_bandeira</name>
+        <rename>ct_bandeira</rename>
+        <type>String</type>
+        <length>-2</length>
+        <precision>-2</precision>
+        <conversion_mask/>
+        <date_format_lenient>false</date_format_lenient>
+        <date_format_locale/>
+        <date_format_timezone/>
+        <lenient_string_to_number>false</lenient_string_to_number>
+        <encoding/>
+        <decimal_symbol/>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <storage_type/>
+      </meta>
+      <meta>
+        <name>car_funcao</name>
+        <rename>ct_funcao</rename>
+        <type>String</type>
+        <length>-2</length>
+        <precision>-2</precision>
+        <conversion_mask/>
+        <date_format_lenient>false</date_format_lenient>
+        <date_format_locale/>
+        <date_format_timezone/>
+        <lenient_string_to_number>false</lenient_string_to_number>
+        <encoding/>
+        <decimal_symbol/>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <storage_type/>
+      </meta>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>992</xloc>
+      <yloc>576</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Sequence - Indice</name>
+    <type>Sequence</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <valuename>seq</valuename>
+    <use_database>N</use_database>
+    <connection/>
+    <schema/>
+    <seqname>SEQ_</seqname>
+    <use_counter>Y</use_counter>
+    <counter_name/>
+    <start_at>0</start_at>
+    <increment_by>1</increment_by>
+    <max_value>999999999</max_value>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>240</xloc>
+      <yloc>240</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Sort Rows - Para Unique</name>
+    <type>SortRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <directory>%%java.io.tmpdir%%</directory>
+    <prefix>out</prefix>
+    <sort_size>1000000</sort_size>
+    <free_memory>25</free_memory>
+    <compress>N</compress>
+    <compress_variable/>
+    <unique_rows>N</unique_rows>
+    <fields>
+      <field>
+        <name>car_bandeira</name>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <collator_enabled>N</collator_enabled>
+        <collator_strength>2</collator_strength>
+        <presorted>N</presorted>
+      </field>
+      <field>
+        <name>car_funcao</name>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <collator_enabled>N</collator_enabled>
+        <collator_strength>2</collator_strength>
+        <presorted>N</presorted>
+      </field>
+      <field>
+        <name>car_produto</name>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <collator_enabled>N</collator_enabled>
+        <collator_strength>2</collator_strength>
+        <presorted>N</presorted>
+      </field>
+      <field>
+        <name>car_modalidade</name>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <collator_enabled>N</collator_enabled>
+        <collator_strength>2</collator_strength>
+        <presorted>N</presorted>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>1200</xloc>
+      <yloc>400</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Table Output - dim_cartao</name>
     <type>TableOutput</type>
     <description/>
     <distribute>Y</distribute>
@@ -601,7 +1350,7 @@
       <schema_name/>
     </partitioning>
     <connection>Banco SAD</connection>
-    <schema>public</schema>
+    <schema>dm_financeiro</schema>
     <table>dim_cartao</table>
     <commit>1000</commit>
     <truncate>N</truncate>
@@ -634,9 +1383,57 @@
         <column_name>car_modalidade</column_name>
         <stream_name>car_modalidade</stream_name>
       </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>288</xloc>
+      <yloc>400</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Table Output - dim_cartao_tipo</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>Banco SAD</connection>
+    <schema>dm_financeiro</schema>
+    <table>dim_cartao_tipo</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <specify_fields>Y</specify_fields>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+    <fields>
       <field>
-        <column_name>car_numero_parcela</column_name>
-        <stream_name>car_numero_parcela</stream_name>
+        <column_name>ct_bandeira</column_name>
+        <stream_name>ct_bandeira</stream_name>
+      </field>
+      <field>
+        <column_name>ct_funcao</column_name>
+        <stream_name>ct_funcao</stream_name>
       </field>
     </fields>
     <attributes/>
@@ -648,8 +1445,94 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>544</xloc>
-      <yloc>288</yloc>
+      <xloc>112</xloc>
+      <yloc>576</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Unique Rows - Deduplica</name>
+    <type>Unique</type>
+    <description/>
+    <distribute>N</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <count_rows>N</count_rows>
+    <count_field/>
+    <reject_duplicate_row>N</reject_duplicate_row>
+    <error_description/>
+    <fields>
+      <field>
+        <name>car_bandeira</name>
+        <case_insensitive>N</case_insensitive>
+      </field>
+      <field>
+        <name>car_funcao</name>
+        <case_insensitive>N</case_insensitive>
+      </field>
+      <field>
+        <name>car_produto</name>
+        <case_insensitive>N</case_insensitive>
+      </field>
+      <field>
+        <name>car_modalidade</name>
+        <case_insensitive>N</case_insensitive>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>992</xloc>
+      <yloc>400</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Unique Rows - Remover a Duplicação</name>
+    <type>Unique</type>
+    <description/>
+    <distribute>N</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <count_rows>N</count_rows>
+    <count_field/>
+    <reject_duplicate_row>N</reject_duplicate_row>
+    <error_description/>
+    <fields>
+      <field>
+        <name>ct_bandeira</name>
+        <case_insensitive>N</case_insensitive>
+      </field>
+      <field>
+        <name>ct_funcao</name>
+        <case_insensitive>N</case_insensitive>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>736</xloc>
+      <yloc>576</yloc>
       <draw>Y</draw>
     </GUI>
   </step>

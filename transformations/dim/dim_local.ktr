@@ -429,8 +429,8 @@
     <created_user>-</created_user>
     <created_date>2026/06/03 18:31:57.386</created_date>
     <modified_user>-</modified_user>
-    <modified_date>2026/06/03 18:31:57.386</modified_date>
-    <key_for_session_key>H4sIAAAAAAAA/wMAAAAAAAAAAAA=</key_for_session_key>
+    <modified_date>2026/06/06 00:00:00.000</modified_date>
+    <key_for_session_key>H4sIAAAAAAAAAAMAAAAAAAAAAAA=</key_for_session_key>
     <is_key_private>N</is_key_private>
   </info>
   <notepads>
@@ -488,14 +488,94 @@
   </connection>
   <order>
     <hop>
-      <from>CSV file input</from>
-      <to>Table output</to>
+      <from>Gera Periodos - 60 Linhas</from>
+      <to>Sequence - Indice</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Sequence - Indice</from>
+      <to>JavaScript - Calcula Periodo</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>JavaScript - Calcula Periodo</from>
+      <to>Filter - Apenas Periodos Validos</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Filter - Apenas Periodos Validos</from>
+      <to>Calculator - Monta URL BCB</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Calculator - Monta URL BCB</from>
+      <to>REST Client - BCB API</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>REST Client - BCB API</from>
+      <to>JSON Input - Parseia UFTerminal</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>JSON Input - Parseia UFTerminal</from>
+      <to>Sort Rows - Para Unique UF</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Sort Rows - Para Unique UF</from>
+      <to>Unique Rows - Deduplica UF</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Unique Rows - Deduplica UF</from>
+      <to>Calculator - Monta URL IBGE</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Calculator - Monta URL IBGE</from>
+      <to>REST Client - IBGE API</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>REST Client - IBGE API</from>
+      <to>JSON Input - Parseia Estado IBGE</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>JSON Input - Parseia Estado IBGE</from>
+      <to>Filter - Apenas UF Valida</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Filter - Apenas UF Valida</from>
+      <to>JavaScript - Add Lat Lon</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>JavaScript - Add Lat Lon</from>
+      <to>Select Values - Renomeia Campos</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Select Values - Renomeia Campos</from>
+      <to>Database Lookup - Verifica Existente</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Database Lookup - Verifica Existente</from>
+      <to>Filter - Apenas Novos</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Filter - Apenas Novos</from>
+      <to>Table Output - dim_local</to>
       <enabled>Y</enabled>
     </hop>
   </order>
   <step>
-    <name>CSV file input</name>
-    <type>CsvInput</type>
+    <name>Calculator - Monta URL BCB</name>
+    <type>ScriptValueMod</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -504,86 +584,613 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <filename>C:\Users\Guilherme\Downloads\estados_brasil.csv</filename>
-    <filename_field/>
-    <rownum_field/>
-    <include_filename>N</include_filename>
-    <separator>;</separator>
-    <enclosure>"</enclosure>
-    <header>Y</header>
-    <buffer_size>50000</buffer_size>
-    <lazy_conversion>Y</lazy_conversion>
-    <add_filename_result>N</add_filename_result>
-    <parallel>N</parallel>
-    <newline_possible>N</newline_possible>
-    <format>mixed</format>
-    <encoding/>
+    <compatible>Y</compatible>
+    <optimizationLevel>9</optimizationLevel>
+    <jsScripts>
+      <jsScript>
+        <jsScript_type>0</jsScript_type>
+        <jsScript_name>Script 1</jsScript_name>
+        <jsScript_script>
+var p = periodo + "";
+var url_completa =
+  "https://olinda.bcb.gov.br/olinda/servico/MPV_DadosAbertos/versao/v1/odata/" +
+  "INFRTERMDA(trimestre=@trimestre)" +
+  "?@trimestre='" + p + "'" +
+  "&amp;$format=json" +
+  "&amp;$top=10000" +
+  "&amp;$select=UFTerminal";
+        </jsScript_script>
+      </jsScript>
+    </jsScripts>
     <fields>
       <field>
-        <name>loc_uf</name>
+        <name>url_completa</name>
+        <rename>url_completa</rename>
         <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>736</xloc>
+      <yloc>240</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Calculator - Monta URL IBGE</name>
+    <type>ScriptValueMod</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <compatible>Y</compatible>
+    <optimizationLevel>9</optimizationLevel>
+    <jsScripts>
+      <jsScript>
+        <jsScript_type>0</jsScript_type>
+        <jsScript_name>Script 1</jsScript_name>
+        <jsScript_script>
+var uf = uf_terminal + "";
+var url_ibge = "https://servicodados.ibge.gov.br/api/v1/localidades/estados/" + uf;
+        </jsScript_script>
+      </jsScript>
+    </jsScripts>
+    <fields>
+      <field>
+        <name>url_ibge</name>
+        <rename>url_ibge</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>1520</xloc>
+      <yloc>240</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Database Lookup - Verifica Existente</name>
+    <type>DBLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>Banco SAD</connection>
+    <cache>N</cache>
+    <cache_load_all>N</cache_load_all>
+    <cache_size>0</cache_size>
+    <lookup>
+      <schema>public</schema>
+      <table>dim_local</table>
+      <orderby/>
+      <fail_on_multiple>N</fail_on_multiple>
+      <eat_row_on_failure>N</eat_row_on_failure>
+      <key>
+        <name>loc_uf</name>
+        <field>loc_uf</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>loc_sk</name>
+        <rename>existe_flag</rename>
+        <default/>
+        <type>Integer</type>
+      </value>
+    </lookup>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>448</xloc>
+      <yloc>384</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Filter - Apenas Novos</name>
+    <type>FilterRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <send_true_to>Table Output - dim_local</send_true_to>
+    <send_false_to/>
+    <compare>
+      <condition>
+        <negated>N</negated>
+        <leftvalue>existe_flag</leftvalue>
+        <function>IS NULL</function>
+        <rightvalue/>
+      </condition>
+    </compare>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>256</xloc>
+      <yloc>384</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Filter - Apenas Periodos Validos</name>
+    <type>FilterRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <send_true_to>Calculator - Monta URL BCB</send_true_to>
+    <send_false_to/>
+    <compare>
+      <condition>
+        <negated>N</negated>
+        <leftvalue>manter</leftvalue>
+        <function>=</function>
+        <rightvalue/>
+        <value>
+          <name>constant</name>
+          <type>String</type>
+          <text>S</text>
+          <length>-1</length>
+          <precision>-1</precision>
+          <isnull>N</isnull>
+          <mask/>
+        </value>
+      </condition>
+    </compare>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>560</xloc>
+      <yloc>240</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Filter - Apenas UF Valida</name>
+    <type>FilterRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <send_true_to>JavaScript - Add Lat Lon</send_true_to>
+    <send_false_to/>
+    <compare>
+      <condition>
+        <negated>Y</negated>
+        <leftvalue>ibge_sigla</leftvalue>
+        <function>IS NULL</function>
+        <rightvalue/>
+      </condition>
+    </compare>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>1040</xloc>
+      <yloc>384</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Gera Periodos - 60 Linhas</name>
+    <type>RowGenerator</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+    </fields>
+    <limit>60</limit>
+    <never_ending>N</never_ending>
+    <interval_in_ms>5000</interval_in_ms>
+    <row_time_field>now</row_time_field>
+    <last_time_field>FiveSecondsAgo</last_time_field>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>80</xloc>
+      <yloc>240</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>JSON Input - Parseia Estado IBGE</name>
+    <type>JsonInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <include>N</include>
+    <include_field/>
+    <rownum>N</rownum>
+    <addresultfile>N</addresultfile>
+    <readurl>N</readurl>
+    <removeSourceField>N</removeSourceField>
+    <IsIgnoreEmptyFile>Y</IsIgnoreEmptyFile>
+    <doNotFailIfNoFile>Y</doNotFailIfNoFile>
+    <ignoreMissingPath>Y</ignoreMissingPath>
+    <defaultPathLeafToNull>Y</defaultPathLeafToNull>
+    <includeNulls>N</includeNulls>
+    <rownum_field/>
+    <file>
+      <name/>
+      <filemask/>
+      <exclude_filemask/>
+      <file_required/>
+      <include_subfolders/>
+    </file>
+    <fields>
+      <field>
+        <name>ibge_id</name>
+        <path>$.id</path>
+        <type>Integer</type>
         <format/>
-        <currency>$</currency>
-        <decimal>.</decimal>
-        <group>,</group>
-        <length>2</length>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
         <precision>-1</precision>
         <trim_type>none</trim_type>
+        <repeat>N</repeat>
       </field>
       <field>
-        <name>loc_estado</name>
+        <name>ibge_sigla</name>
+        <path>$.sigla</path>
         <type>String</type>
         <format/>
-        <currency>$</currency>
-        <decimal>.</decimal>
-        <group>,</group>
-        <length>8</length>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
         <precision>-1</precision>
         <trim_type>none</trim_type>
+        <repeat>N</repeat>
       </field>
+      <field>
+        <name>ibge_nome</name>
+        <path>$.nome</path>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>ibge_regiao</name>
+        <path>$.regiao.nome</path>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+    </fields>
+    <limit>0</limit>
+    <IsInFields>Y</IsInFields>
+    <IsAFile>N</IsAFile>
+    <valueField>ibge_response</valueField>
+    <shortFileFieldName/>
+    <pathFieldName/>
+    <hiddenFieldName/>
+    <lastModificationTimeFieldName/>
+    <uriNameFieldName/>
+    <rootUriNameFieldName/>
+    <extensionFieldName/>
+    <sizeFieldName/>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>1216</xloc>
+      <yloc>384</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>JSON Input - Parseia UFTerminal</name>
+    <type>JsonInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <include>N</include>
+    <include_field/>
+    <rownum>N</rownum>
+    <addresultfile>N</addresultfile>
+    <readurl>N</readurl>
+    <removeSourceField>N</removeSourceField>
+    <IsIgnoreEmptyFile>Y</IsIgnoreEmptyFile>
+    <doNotFailIfNoFile>Y</doNotFailIfNoFile>
+    <ignoreMissingPath>Y</ignoreMissingPath>
+    <defaultPathLeafToNull>Y</defaultPathLeafToNull>
+    <includeNulls>N</includeNulls>
+    <rownum_field/>
+    <file>
+      <name/>
+      <filemask/>
+      <exclude_filemask/>
+      <file_required/>
+      <include_subfolders/>
+    </file>
+    <fields>
+      <field>
+        <name>uf_terminal</name>
+        <path>$.value[*].UFTerminal</path>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+    </fields>
+    <limit>0</limit>
+    <IsInFields>Y</IsInFields>
+    <IsAFile>N</IsAFile>
+    <valueField>api_response</valueField>
+    <shortFileFieldName/>
+    <pathFieldName/>
+    <hiddenFieldName/>
+    <lastModificationTimeFieldName/>
+    <uriNameFieldName/>
+    <rootUriNameFieldName/>
+    <extensionFieldName/>
+    <sizeFieldName/>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>1040</xloc>
+      <yloc>240</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>JavaScript - Add Lat Lon</name>
+    <type>ScriptValueMod</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <compatible>Y</compatible>
+    <optimizationLevel>9</optimizationLevel>
+    <jsScripts>
+      <jsScript>
+        <jsScript_type>0</jsScript_type>
+        <jsScript_name>Script 1</jsScript_name>
+        <jsScript_script>
+// Centroides geograficos (latitude/longitude) de cada estado brasileiro
+var centroides = {
+  "AC": { lat: "-9.0238",  lon: "-70.8120" },
+  "AL": { lat: "-9.5713",  lon: "-36.7820" },
+  "AM": { lat: "-3.4168",  lon: "-65.8561" },
+  "AP": { lat: "1.4102",   lon: "-51.7703" },
+  "BA": { lat: "-12.5797", lon: "-41.7007" },
+  "CE": { lat: "-5.4984",  lon: "-39.3206" },
+  "DF": { lat: "-15.7801", lon: "-47.9292" },
+  "ES": { lat: "-19.1834", lon: "-40.3089" },
+  "GO": { lat: "-15.8270", lon: "-49.8362" },
+  "MA": { lat: "-5.4220",  lon: "-45.4426" },
+  "MG": { lat: "-18.5122", lon: "-44.5550" },
+  "MS": { lat: "-20.7722", lon: "-54.7852" },
+  "MT": { lat: "-12.6819", lon: "-56.9211" },
+  "PA": { lat: "-3.4168",  lon: "-52.2111" },
+  "PB": { lat: "-7.2399",  lon: "-36.7819" },
+  "PE": { lat: "-8.8137",  lon: "-36.9541" },
+  "PI": { lat: "-7.7183",  lon: "-42.7289" },
+  "PR": { lat: "-25.2521", lon: "-52.0215" },
+  "RJ": { lat: "-22.9035", lon: "-43.1724" },
+  "RN": { lat: "-5.8127",  lon: "-36.2492" },
+  "RO": { lat: "-10.9161", lon: "-62.0775" },
+  "RR": { lat: "1.9900",   lon: "-61.3300" },
+  "RS": { lat: "-30.0346", lon: "-51.2177" },
+  "SC": { lat: "-27.2423", lon: "-50.2189" },
+  "SE": { lat: "-10.5741", lon: "-37.3857" },
+  "SP": { lat: "-22.9099", lon: "-48.2020" },
+  "TO": { lat: "-10.1753", lon: "-48.2982" }
+};
+
+var sigla = ibge_sigla + "";
+var centroide = centroides[sigla];
+var loc_latidude  = centroide ? centroide.lat : "0";
+var loc_longitude = centroide ? centroide.lon : "0";
+        </jsScript_script>
+      </jsScript>
+    </jsScripts>
+    <fields>
       <field>
         <name>loc_latidude</name>
-        <type>Number</type>
-        <format>#.#</format>
-        <currency>$</currency>
-        <decimal>.</decimal>
-        <group>,</group>
-        <length>6</length>
-        <precision>2</precision>
-        <trim_type>none</trim_type>
+        <rename>loc_latidude</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
       </field>
       <field>
         <name>loc_longitude</name>
-        <type>Number</type>
-        <format>#.#</format>
-        <currency>$</currency>
-        <decimal>.</decimal>
-        <group>,</group>
-        <length>6</length>
-        <precision>2</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>loc_cod_ibge</name>
-        <type>Integer</type>
-        <format>#</format>
-        <currency>$</currency>
-        <decimal>.</decimal>
-        <group>,</group>
-        <length>15</length>
-        <precision>0</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>loc_regicao</name>
+        <rename>loc_longitude</rename>
         <type>String</type>
-        <format/>
-        <currency>$</currency>
-        <decimal>.</decimal>
-        <group>,</group>
-        <length>8</length>
+        <length>-1</length>
         <precision>-1</precision>
-        <trim_type>none</trim_type>
+        <replace>N</replace>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>864</xloc>
+      <yloc>384</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>JavaScript - Calcula Periodo</name>
+    <type>ScriptValueMod</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <compatible>Y</compatible>
+    <optimizationLevel>9</optimizationLevel>
+    <jsScripts>
+      <jsScript>
+        <jsScript_type>0</jsScript_type>
+        <jsScript_name>Script 1</jsScript_name>
+        <jsScript_script>
+// seq 0 = 20191, seq 1 = 20192, seq 2 = 20193, seq 3 = 20194, seq 4 = 20201, ...
+var s = parseInt(seq);
+var ano = 2019 + Math.floor(s / 4);
+var trimestre = (s % 4) + 1;
+var periodo = "" + ano + trimestre;
+
+// Trimestre alvo: anterior ao atual (API disponibiliza com ~2 meses de atraso)
+var d = new Date();
+var curY = d.getFullYear();
+var curM = d.getMonth() + 1;
+var curQ = Math.ceil(curM / 3);
+var tQ = curQ - 1;
+var tY = curY;
+if (tQ &lt; 1) { tQ = 4; tY = curY - 1; }
+var periodo_alvo = "" + tY + tQ;
+
+// manter = "S" somente se este periodo estiver dentro do intervalo valido
+var manter = (periodo &lt;= periodo_alvo) ? "S" : "N";
+        </jsScript_script>
+      </jsScript>
+    </jsScripts>
+    <fields>
+      <field>
+        <name>periodo</name>
+        <rename>periodo</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>
+      <field>
+        <name>manter</name>
+        <rename>manter</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
       </field>
     </fields>
     <attributes/>
@@ -596,12 +1203,245 @@
     </remotesteps>
     <GUI>
       <xloc>400</xloc>
-      <yloc>288</yloc>
+      <yloc>240</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Table output</name>
+    <name>REST Client - BCB API</name>
+    <type>Rest</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <applicationType>JSON</applicationType>
+    <method>GET</method>
+    <url/>
+    <urlInField>Y</urlInField>
+    <dynamicMethod>N</dynamicMethod>
+    <methodFieldName/>
+    <urlField>url_completa</urlField>
+    <bodyField/>
+    <httpLogin/>
+    <httpPassword>Encrypted </httpPassword>
+    <proxyHost/>
+    <proxyPort/>
+    <preemptive>N</preemptive>
+    <trustStoreFile/>
+    <trustStorePassword>Encrypted </trustStorePassword>
+    <headers>
+      </headers>
+    <parameters>
+      </parameters>
+    <matrixParameters>
+      </matrixParameters>
+    <result>
+      <name>api_response</name>
+      <code>http_status</code>
+      <response_time/>
+      <response_header/>
+    </result>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>880</xloc>
+      <yloc>240</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>REST Client - IBGE API</name>
+    <type>Rest</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <applicationType>JSON</applicationType>
+    <method>GET</method>
+    <url/>
+    <urlInField>Y</urlInField>
+    <dynamicMethod>N</dynamicMethod>
+    <methodFieldName/>
+    <urlField>url_ibge</urlField>
+    <bodyField/>
+    <httpLogin/>
+    <httpPassword>Encrypted </httpPassword>
+    <proxyHost/>
+    <proxyPort/>
+    <preemptive>N</preemptive>
+    <trustStoreFile/>
+    <trustStorePassword>Encrypted </trustStorePassword>
+    <headers>
+      </headers>
+    <parameters>
+      </parameters>
+    <matrixParameters>
+      </matrixParameters>
+    <result>
+      <name>ibge_response</name>
+      <code>ibge_http_status</code>
+      <response_time/>
+      <response_header/>
+    </result>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>1520</xloc>
+      <yloc>384</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Select Values - Renomeia Campos</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <field>
+        <name>ibge_sigla</name>
+        <rename>loc_uf</rename>
+      </field>
+      <field>
+        <name>ibge_nome</name>
+        <rename>loc_estado</rename>
+      </field>
+      <field>
+        <name>loc_latidude</name>
+        <rename>loc_latidude</rename>
+      </field>
+      <field>
+        <name>loc_longitude</name>
+        <rename>loc_longitude</rename>
+      </field>
+      <field>
+        <name>ibge_id</name>
+        <rename>loc_cod_ibge</rename>
+      </field>
+      <field>
+        <name>ibge_regiao</name>
+        <rename>loc_regicao</rename>
+      </field>
+      <select_unspecified>N</select_unspecified>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>672</xloc>
+      <yloc>384</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Sequence - Indice</name>
+    <type>Sequence</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <valuename>seq</valuename>
+    <use_database>N</use_database>
+    <connection/>
+    <schema/>
+    <seqname>SEQ_</seqname>
+    <use_counter>Y</use_counter>
+    <counter_name/>
+    <start_at>0</start_at>
+    <increment_by>1</increment_by>
+    <max_value>999999999</max_value>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>240</xloc>
+      <yloc>240</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Sort Rows - Para Unique UF</name>
+    <type>SortRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <directory>%%java.io.tmpdir%%</directory>
+    <prefix>out</prefix>
+    <sort_size>1000000</sort_size>
+    <free_memory>25</free_memory>
+    <compress>N</compress>
+    <compress_variable/>
+    <unique_rows>N</unique_rows>
+    <fields>
+      <field>
+        <name>uf_terminal</name>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <collator_enabled>N</collator_enabled>
+        <collator_strength>2</collator_strength>
+        <presorted>N</presorted>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>1200</xloc>
+      <yloc>240</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Table Output - dim_local</name>
     <type>TableOutput</type>
     <description/>
     <distribute>Y</distribute>
@@ -663,8 +1503,43 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>560</xloc>
-      <yloc>288</yloc>
+      <xloc>80</xloc>
+      <yloc>384</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Unique Rows - Deduplica UF</name>
+    <type>Unique</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <count_rows>N</count_rows>
+    <count_field/>
+    <reject_duplicate_row>N</reject_duplicate_row>
+    <error_description/>
+    <fields>
+      <field>
+        <name>uf_terminal</name>
+        <case_insensitive>N</case_insensitive>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>1360</xloc>
+      <yloc>240</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
