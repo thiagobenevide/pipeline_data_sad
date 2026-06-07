@@ -360,8 +360,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>64</xloc>
-      <yloc>176</yloc>
+      <xloc>128</xloc>
+      <yloc>208</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -404,8 +404,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>224</xloc>
-      <yloc>176</yloc>
+      <xloc>288</xloc>
+      <yloc>208</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -448,8 +448,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>480</xloc>
-      <yloc>176</yloc>
+      <xloc>544</xloc>
+      <yloc>208</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -478,8 +478,8 @@ WHERE f.tra_sk_cartao = s.tra_sk_cartao
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>768</xloc>
-      <yloc>176</yloc>
+      <xloc>832</xloc>
+      <yloc>208</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -500,8 +500,8 @@ WHERE f.tra_sk_cartao = s.tra_sk_cartao
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>1008</xloc>
-      <yloc>176</yloc>
+      <xloc>1072</xloc>
+      <yloc>208</yloc>
       <attributes_kjc/>
     </entry>
   </entries>

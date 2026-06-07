@@ -342,10 +342,6 @@
   <pass_batchid>N</pass_batchid>
   <shared_objects_file/>
   <entries>
-
-    <!-- ========================================================== -->
-    <!-- START                                                        -->
-    <!-- ========================================================== -->
     <entry>
       <name>START</name>
       <description/>
@@ -364,14 +360,10 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>64</xloc>
-      <yloc>176</yloc>
+      <xloc>160</xloc>
+      <yloc>224</yloc>
       <attributes_kjc/>
     </entry>
-
-    <!-- ========================================================== -->
-    <!-- ETAPA 1: INFRTERMDA → DELETE + INSERT fato_terminais        -->
-    <!-- ========================================================== -->
     <entry>
       <name>fato_terminais - API INFRTERMDA INSERT</name>
       <description>Chama API INFRTERMDA, DELETE + INSERT na fato_terminais (dados POS/PDV)</description>
@@ -412,14 +404,10 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>256</xloc>
-      <yloc>176</yloc>
+      <xloc>352</xloc>
+      <yloc>224</yloc>
       <attributes_kjc/>
     </entry>
-
-    <!-- ========================================================== -->
-    <!-- ETAPA 2: INFRESTADA → Staging stg_terminais_estab          -->
-    <!-- ========================================================== -->
     <entry>
       <name>fato_terminais_estab - Staging INFRESTADA</name>
       <description>Chama API INFRESTADA, grava dados de estabelecimentos em stg_terminais_estab</description>
@@ -460,14 +448,10 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>512</xloc>
-      <yloc>176</yloc>
+      <xloc>608</xloc>
+      <yloc>224</yloc>
       <attributes_kjc/>
     </entry>
-
-    <!-- ========================================================== -->
-    <!-- ETAPA 3: Bulk UPDATE fato_terminais FROM stg               -->
-    <!-- ========================================================== -->
     <entry>
       <name>Bulk UPDATE fato_terminais FROM staging</name>
       <description>Atualiza fato_terminais com dados de estabelecimentos da staging em uma unica operacao</description>
@@ -492,14 +476,10 @@ WHERE f.ter_sk_local = s.ter_sk_local
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>768</xloc>
-      <yloc>176</yloc>
+      <xloc>864</xloc>
+      <yloc>224</yloc>
       <attributes_kjc/>
     </entry>
-
-    <!-- ========================================================== -->
-    <!-- SUCCESS                                                      -->
-    <!-- ========================================================== -->
     <entry>
       <name>SUCCESS</name>
       <description/>
@@ -518,11 +498,10 @@ WHERE f.ter_sk_local = s.ter_sk_local
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>1008</xloc>
-      <yloc>176</yloc>
+      <xloc>1104</xloc>
+      <yloc>224</yloc>
       <attributes_kjc/>
     </entry>
-
   </entries>
   <hops>
     <hop>

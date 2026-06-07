@@ -646,7 +646,7 @@ var url_portadorda =
       </output>
     </remotesteps>
     <GUI>
-      <xloc>112</xloc>
+      <xloc>720</xloc>
       <yloc>336</yloc>
       <draw>Y</draw>
     </GUI>
@@ -694,8 +694,8 @@ var url_portadorda =
       </output>
     </remotesteps>
     <GUI>
-      <xloc>112</xloc>
-      <yloc>528</yloc>
+      <xloc>480</xloc>
+      <yloc>336</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -939,7 +939,7 @@ var url_portadorda =
       </output>
     </remotesteps>
     <GUI>
-      <xloc>512</xloc>
+      <xloc>992</xloc>
       <yloc>336</yloc>
       <draw>Y</draw>
     </GUI>
@@ -1059,8 +1059,8 @@ var manter = (periodo &lt;= periodo_limite) ? "S" : "N";
       </output>
     </remotesteps>
     <GUI>
-      <xloc>752</xloc>
-      <yloc>336</yloc>
+      <xloc>992</xloc>
+      <yloc>176</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1172,8 +1172,8 @@ WHERE '${TRIMESTRE}' = ''
       </output>
     </remotesteps>
     <GUI>
-      <xloc>528</xloc>
-      <yloc>528</yloc>
+      <xloc>224</xloc>
+      <yloc>336</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
