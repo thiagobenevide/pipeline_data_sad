@@ -135,24 +135,274 @@
         <table/>
         <interval/>
         <timeout_days/>
+        <field>
+          <id>ID_BATCH</id>
+          <enabled>Y</enabled>
+          <name>ID_BATCH</name>
+        </field>
+        <field>
+          <id>SEQ_NR</id>
+          <enabled>Y</enabled>
+          <name>SEQ_NR</name>
+        </field>
+        <field>
+          <id>LOGDATE</id>
+          <enabled>Y</enabled>
+          <name>LOGDATE</name>
+        </field>
+        <field>
+          <id>TRANSNAME</id>
+          <enabled>Y</enabled>
+          <name>TRANSNAME</name>
+        </field>
+        <field>
+          <id>STEPNAME</id>
+          <enabled>Y</enabled>
+          <name>STEPNAME</name>
+        </field>
+        <field>
+          <id>STEP_COPY</id>
+          <enabled>Y</enabled>
+          <name>STEP_COPY</name>
+        </field>
+        <field>
+          <id>LINES_READ</id>
+          <enabled>Y</enabled>
+          <name>LINES_READ</name>
+        </field>
+        <field>
+          <id>LINES_WRITTEN</id>
+          <enabled>Y</enabled>
+          <name>LINES_WRITTEN</name>
+        </field>
+        <field>
+          <id>LINES_UPDATED</id>
+          <enabled>Y</enabled>
+          <name>LINES_UPDATED</name>
+        </field>
+        <field>
+          <id>LINES_INPUT</id>
+          <enabled>Y</enabled>
+          <name>LINES_INPUT</name>
+        </field>
+        <field>
+          <id>LINES_OUTPUT</id>
+          <enabled>Y</enabled>
+          <name>LINES_OUTPUT</name>
+        </field>
+        <field>
+          <id>LINES_REJECTED</id>
+          <enabled>Y</enabled>
+          <name>LINES_REJECTED</name>
+        </field>
+        <field>
+          <id>ERRORS</id>
+          <enabled>Y</enabled>
+          <name>ERRORS</name>
+        </field>
+        <field>
+          <id>INPUT_BUFFER_ROWS</id>
+          <enabled>Y</enabled>
+          <name>INPUT_BUFFER_ROWS</name>
+        </field>
+        <field>
+          <id>OUTPUT_BUFFER_ROWS</id>
+          <enabled>Y</enabled>
+          <name>OUTPUT_BUFFER_ROWS</name>
+        </field>
       </perf-log-table>
       <channel-log-table>
         <connection/>
         <schema/>
         <table/>
         <timeout_days/>
+        <field>
+          <id>ID_BATCH</id>
+          <enabled>Y</enabled>
+          <name>ID_BATCH</name>
+        </field>
+        <field>
+          <id>CHANNEL_ID</id>
+          <enabled>Y</enabled>
+          <name>CHANNEL_ID</name>
+        </field>
+        <field>
+          <id>LOG_DATE</id>
+          <enabled>Y</enabled>
+          <name>LOG_DATE</name>
+        </field>
+        <field>
+          <id>LOGGING_OBJECT_TYPE</id>
+          <enabled>Y</enabled>
+          <name>LOGGING_OBJECT_TYPE</name>
+        </field>
+        <field>
+          <id>OBJECT_NAME</id>
+          <enabled>Y</enabled>
+          <name>OBJECT_NAME</name>
+        </field>
+        <field>
+          <id>OBJECT_COPY</id>
+          <enabled>Y</enabled>
+          <name>OBJECT_COPY</name>
+        </field>
+        <field>
+          <id>REPOSITORY_DIRECTORY</id>
+          <enabled>Y</enabled>
+          <name>REPOSITORY_DIRECTORY</name>
+        </field>
+        <field>
+          <id>FILENAME</id>
+          <enabled>Y</enabled>
+          <name>FILENAME</name>
+        </field>
+        <field>
+          <id>OBJECT_ID</id>
+          <enabled>Y</enabled>
+          <name>OBJECT_ID</name>
+        </field>
+        <field>
+          <id>OBJECT_REVISION</id>
+          <enabled>Y</enabled>
+          <name>OBJECT_REVISION</name>
+        </field>
+        <field>
+          <id>PARENT_CHANNEL_ID</id>
+          <enabled>Y</enabled>
+          <name>PARENT_CHANNEL_ID</name>
+        </field>
+        <field>
+          <id>ROOT_CHANNEL_ID</id>
+          <enabled>Y</enabled>
+          <name>ROOT_CHANNEL_ID</name>
+        </field>
       </channel-log-table>
       <step-log-table>
         <connection/>
         <schema/>
         <table/>
         <timeout_days/>
+        <field>
+          <id>ID_BATCH</id>
+          <enabled>Y</enabled>
+          <name>ID_BATCH</name>
+        </field>
+        <field>
+          <id>CHANNEL_ID</id>
+          <enabled>Y</enabled>
+          <name>CHANNEL_ID</name>
+        </field>
+        <field>
+          <id>LOG_DATE</id>
+          <enabled>Y</enabled>
+          <name>LOG_DATE</name>
+        </field>
+        <field>
+          <id>TRANSNAME</id>
+          <enabled>Y</enabled>
+          <name>TRANSNAME</name>
+        </field>
+        <field>
+          <id>STEPNAME</id>
+          <enabled>Y</enabled>
+          <name>STEPNAME</name>
+        </field>
+        <field>
+          <id>STEP_COPY</id>
+          <enabled>Y</enabled>
+          <name>STEP_COPY</name>
+        </field>
+        <field>
+          <id>LINES_READ</id>
+          <enabled>Y</enabled>
+          <name>LINES_READ</name>
+        </field>
+        <field>
+          <id>LINES_WRITTEN</id>
+          <enabled>Y</enabled>
+          <name>LINES_WRITTEN</name>
+        </field>
+        <field>
+          <id>LINES_UPDATED</id>
+          <enabled>Y</enabled>
+          <name>LINES_UPDATED</name>
+        </field>
+        <field>
+          <id>LINES_INPUT</id>
+          <enabled>Y</enabled>
+          <name>LINES_INPUT</name>
+        </field>
+        <field>
+          <id>LINES_OUTPUT</id>
+          <enabled>Y</enabled>
+          <name>LINES_OUTPUT</name>
+        </field>
+        <field>
+          <id>LINES_REJECTED</id>
+          <enabled>Y</enabled>
+          <name>LINES_REJECTED</name>
+        </field>
+        <field>
+          <id>ERRORS</id>
+          <enabled>Y</enabled>
+          <name>ERRORS</name>
+        </field>
+        <field>
+          <id>LOG_FIELD</id>
+          <enabled>N</enabled>
+          <name>LOG_FIELD</name>
+        </field>
       </step-log-table>
       <metrics-log-table>
         <connection/>
         <schema/>
         <table/>
         <timeout_days/>
+        <field>
+          <id>ID_BATCH</id>
+          <enabled>Y</enabled>
+          <name>ID_BATCH</name>
+        </field>
+        <field>
+          <id>CHANNEL_ID</id>
+          <enabled>Y</enabled>
+          <name>CHANNEL_ID</name>
+        </field>
+        <field>
+          <id>LOG_DATE</id>
+          <enabled>Y</enabled>
+          <name>LOG_DATE</name>
+        </field>
+        <field>
+          <id>METRICS_DATE</id>
+          <enabled>Y</enabled>
+          <name>METRICS_DATE</name>
+        </field>
+        <field>
+          <id>METRICS_CODE</id>
+          <enabled>Y</enabled>
+          <name>METRICS_CODE</name>
+        </field>
+        <field>
+          <id>METRICS_DESCRIPTION</id>
+          <enabled>Y</enabled>
+          <name>METRICS_DESCRIPTION</name>
+        </field>
+        <field>
+          <id>METRICS_SUBJECT</id>
+          <enabled>Y</enabled>
+          <name>METRICS_SUBJECT</name>
+        </field>
+        <field>
+          <id>METRICS_TYPE</id>
+          <enabled>Y</enabled>
+          <name>METRICS_TYPE</name>
+        </field>
+        <field>
+          <id>METRICS_VALUE</id>
+          <enabled>Y</enabled>
+          <name>METRICS_VALUE</name>
+        </field>
       </metrics-log-table>
     </log>
     <maxdate>
@@ -269,6 +519,16 @@
     </hop>
     <hop>
       <from>JSON Input - Parseia Response</from>
+      <to>Sort Rows - Por UF e Periodo</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Sort Rows - Por UF e Periodo</from>
+      <to>Group By - Agrega por UF</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Group By - Agrega por UF</from>
       <to>Database Lookup - dim_local</to>
       <enabled>Y</enabled>
     </hop>
@@ -284,12 +544,10 @@
     </hop>
   </order>
 
-  <!-- ============================================================ -->
-  <!-- STEP 1: TRUNCATE stg e gera sequencia de periodos            -->
-  <!-- ============================================================ -->
+  <!-- Sort por UF + Periodo (pré-requisito do Group By) -->
   <step>
-    <name>Table Input - Truncate STG e Gera Periodos</name>
-    <type>TableInput</type>
+    <name>Sort Rows - Por UF e Periodo</name>
+    <type>SortRows</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -298,95 +556,29 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <connection>Banco SAD</connection>
-    <sql>WITH limpa AS (
-  DELETE FROM dm_financeiro.stg_terminais_estab
-  WHERE '${TRIMESTRE}' = ''
-     OR ter_sk_tempo IN (
-          SELECT tempo_sk
-          FROM dm_financeiro.dim_tempo
-          WHERE temp_ano_trimestre = '${TRIMESTRE}'
-        )
-)
-SELECT gs AS seq
-FROM generate_series(0, 59) gs
-WHERE '${TRIMESTRE}' = ''
-   OR concat(2019 + gs/4, (gs % 4) + 1)::text = '${TRIMESTRE}'</sql>
-    <limit>0</limit>
-    <lookup/>
-    <execute_each_row>N</execute_each_row>
-    <variables_active>Y</variables_active>
-    <lazy_conversion_active>N</lazy_conversion_active>
-    <cached_row_meta_active>N</cached_row_meta_active>
-    <row-meta/>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input/>
-      <output/>
-    </remotesteps>
-    <GUI>
-      <xloc>128</xloc>
-      <yloc>288</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-
-  <!-- ============================================================ -->
-  <!-- STEP 2: Calcula periodo (YYYYQ)                              -->
-  <!-- ============================================================ -->
-  <step>
-    <name>JavaScript - Calcula Periodo</name>
-    <type>ScriptValueMod</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <compatible>Y</compatible>
-    <optimizationLevel>9</optimizationLevel>
-    <jsScripts>
-      <jsScript>
-        <jsScript_type>0</jsScript_type>
-        <jsScript_name>Script 1</jsScript_name>
-        <jsScript_script>
-var s = parseInt(seq);
-var ano = 2019 + Math.floor(s / 4);
-var q   = (s % 4) + 1;
-var periodo = "" + ano + q;
-
-var d   = new Date();
-var cY  = d.getFullYear();
-var cM  = d.getMonth() + 1;
-var cQ  = Math.ceil(cM / 3);
-var tQ  = cQ - 1;
-var tY  = cY;
-if (tQ &lt; 1) { tQ = 4; tY = cY - 1; }
-var periodo_limite = "" + tY + tQ;
-
-var manter = (periodo &lt;= periodo_limite) ? "S" : "N";
-        </jsScript_script>
-      </jsScript>
-    </jsScripts>
+    <directory>%%java.io.tmpdir%%</directory>
+    <prefix>sort</prefix>
+    <sort_size>1000000</sort_size>
+    <free_memory>25</free_memory>
+    <compress>N</compress>
+    <compress_variable/>
+    <unique_rows>N</unique_rows>
     <fields>
       <field>
-        <name>periodo</name>
-        <rename>periodo</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <replace>N</replace>
+        <name>trimestre</name>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <collator_enabled>N</collator_enabled>
+        <collator_strength>0</collator_strength>
+        <presorted>N</presorted>
       </field>
       <field>
-        <name>manter</name>
-        <rename>manter</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <replace>N</replace>
+        <name>UFEstabelecimento</name>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <collator_enabled>N</collator_enabled>
+        <collator_strength>0</collator_strength>
+        <presorted>N</presorted>
       </field>
     </fields>
     <attributes/>
@@ -396,15 +588,175 @@ var manter = (periodo &lt;= periodo_limite) ? "S" : "N";
       <output/>
     </remotesteps>
     <GUI>
-      <xloc>320</xloc>
-      <yloc>288</yloc>
+      <xloc>1088</xloc>
+      <yloc>448</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
 
-  <!-- ============================================================ -->
-  <!-- STEP 3: Filtra periodos validos                              -->
-  <!-- ============================================================ -->
+  <!-- Agrega (SUM) por UFEstabelecimento + trimestre.
+       A API INFRESTADA retorna N linhas por UF (uma por tipo de captura/credenciadora).
+       Precisamos do total por UF para o UPDATE na fato_terminais. -->
+  <step>
+    <name>Group By - Agrega por UF</name>
+    <type>GroupBy</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <all_rows>N</all_rows>
+    <sort_directory>%%java.io.tmpdir%%</sort_directory>
+    <prefix>grp</prefix>
+    <add_linenr>N</add_linenr>
+    <linenr_fieldname/>
+    <give_back_row>N</give_back_row>
+    <group>
+      <field>
+        <name>trimestre</name>
+      </field>
+      <field>
+        <name>UFEstabelecimento</name>
+      </field>
+    </group>
+    <fields>
+      <field>
+        <aggregate>qtdEstabTotal</aggregate>
+        <subject>qtdEstabTotal</subject>
+        <type>SUM</type>
+        <valuefield/>
+      </field>
+      <field>
+        <aggregate>qtdEstabCapturaManual</aggregate>
+        <subject>qtdEstabCapturaManual</subject>
+        <type>SUM</type>
+        <valuefield/>
+      </field>
+      <field>
+        <aggregate>qtdEstabCapturaEletronica</aggregate>
+        <subject>qtdEstabCapturaEletronica</subject>
+        <type>SUM</type>
+        <valuefield/>
+      </field>
+      <field>
+        <aggregate>qtdEstabCapturaRemota</aggregate>
+        <subject>qtdEstabCapturaRemota</subject>
+        <type>SUM</type>
+        <valuefield/>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input/>
+      <output/>
+    </remotesteps>
+    <GUI>
+      <xloc>1088</xloc>
+      <yloc>608</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+
+  <step>
+    <name>Database Lookup - dim_local</name>
+    <type>DBLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>Banco SAD</connection>
+    <cache>Y</cache>
+    <cache_load_all>Y</cache_load_all>
+    <cache_size>0</cache_size>
+    <lookup>
+      <schema>dm_financeiro</schema>
+      <table>dim_local</table>
+      <orderby/>
+      <fail_on_multiple>N</fail_on_multiple>
+      <eat_row_on_failure>N</eat_row_on_failure>
+      <key>
+        <name>UFEstabelecimento</name>
+        <field>loc_uf</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>loc_sk</name>
+        <rename>ter_sk_local</rename>
+        <default/>
+        <type>Integer</type>
+      </value>
+    </lookup>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>864</xloc>
+      <yloc>336</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Database Lookup - dim_tempo</name>
+    <type>DBLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>Banco SAD</connection>
+    <cache>Y</cache>
+    <cache_load_all>Y</cache_load_all>
+    <cache_size>0</cache_size>
+    <lookup>
+      <schema>dm_financeiro</schema>
+      <table>dim_tempo</table>
+      <orderby/>
+      <fail_on_multiple>N</fail_on_multiple>
+      <eat_row_on_failure>N</eat_row_on_failure>
+      <key>
+        <name>trimestre</name>
+        <field>temp_ano_trimestre</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>tempo_sk</name>
+        <rename>ter_sk_tempo</rename>
+        <default/>
+        <type>Integer</type>
+      </value>
+    </lookup>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>672</xloc>
+      <yloc>336</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
   <step>
     <name>Filter - Apenas Periodos Validos</name>
     <type>FilterRows</type>
@@ -438,124 +790,17 @@ var manter = (periodo &lt;= periodo_limite) ? "S" : "N";
     <attributes/>
     <cluster_schema/>
     <remotesteps>
-      <input/>
-      <output/>
+      <input>
+      </input>
+      <output>
+      </output>
     </remotesteps>
     <GUI>
-      <xloc>512</xloc>
-      <yloc>288</yloc>
+      <xloc>672</xloc>
+      <yloc>176</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
-
-  <!-- ============================================================ -->
-  <!-- STEP 4: Monta URL para INFRESTADA                            -->
-  <!-- ============================================================ -->
-  <step>
-    <name>JavaScript - Monta URL</name>
-    <type>ScriptValueMod</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <compatible>Y</compatible>
-    <optimizationLevel>9</optimizationLevel>
-    <jsScripts>
-      <jsScript>
-        <jsScript_type>0</jsScript_type>
-        <jsScript_name>Script 1</jsScript_name>
-        <jsScript_script>
-var p = periodo + "";
-var url_completa =
-  "https://olinda.bcb.gov.br/olinda/servico/MPV_DadosAbertos/versao/v1/odata/" +
-  "INFRESTADA(trimestre=@trimestre)" +
-  "?@trimestre=%27" + p + "%27" +
-  "&amp;$format=json" +
-  "&amp;$top=10000";
-        </jsScript_script>
-      </jsScript>
-    </jsScripts>
-    <fields>
-      <field>
-        <name>url_completa</name>
-        <rename>url_completa</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <replace>N</replace>
-      </field>
-    </fields>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input/>
-      <output/>
-    </remotesteps>
-    <GUI>
-      <xloc>704</xloc>
-      <yloc>288</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-
-  <!-- ============================================================ -->
-  <!-- STEP 5: Chamada REST INFRESTADA                              -->
-  <!-- ============================================================ -->
-  <step>
-    <name>REST Client - BCB API INFRESTADA</name>
-    <type>Rest</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <applicationType>JSON</applicationType>
-    <method>GET</method>
-    <url/>
-    <urlInField>Y</urlInField>
-    <dynamicMethod>N</dynamicMethod>
-    <methodFieldName/>
-    <urlField>url_completa</urlField>
-    <bodyField/>
-    <httpLogin/>
-    <httpPassword>Encrypted </httpPassword>
-    <proxyHost/>
-    <proxyPort/>
-    <preemptive>N</preemptive>
-    <trustStoreFile/>
-    <trustStorePassword>Encrypted </trustStorePassword>
-    <headers/>
-    <parameters/>
-    <matrixParameters/>
-    <result>
-      <name>api_response</name>
-      <code>http_status</code>
-      <response_time/>
-      <response_header/>
-    </result>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input/>
-      <output/>
-    </remotesteps>
-    <GUI>
-      <xloc>896</xloc>
-      <yloc>288</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-
-  <!-- ============================================================ -->
-  <!-- STEP 6: Parse JSON - campos de INFRESTADA                    -->
-  <!-- ============================================================ -->
   <step>
     <name>JSON Input - Parseia Response</name>
     <type>JsonInput</type>
@@ -681,22 +926,192 @@ var url_completa =
     <attributes/>
     <cluster_schema/>
     <remotesteps>
-      <input/>
-      <output/>
+      <input>
+      </input>
+      <output>
+      </output>
     </remotesteps>
     <GUI>
-      <xloc>1088</xloc>
-      <yloc>288</yloc>
+      <xloc>1056</xloc>
+      <yloc>336</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
-
-  <!-- ============================================================ -->
-  <!-- STEP 7: Lookup dim_local por UFEstabelecimento               -->
-  <!-- ============================================================ -->
   <step>
-    <name>Database Lookup - dim_local</name>
-    <type>DBLookup</type>
+    <name>JavaScript - Calcula Periodo</name>
+    <type>ScriptValueMod</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <compatible>Y</compatible>
+    <optimizationLevel>9</optimizationLevel>
+    <jsScripts>
+      <jsScript>
+        <jsScript_type>0</jsScript_type>
+        <jsScript_name>Script 1</jsScript_name>
+        <jsScript_script>
+var s = parseInt(seq);
+var ano = 2019 + Math.floor(s / 4);
+var q   = (s % 4) + 1;
+var periodo = "" + ano + q;
+
+var d   = new Date();
+var cY  = d.getFullYear();
+var cM  = d.getMonth() + 1;
+var cQ  = Math.ceil(cM / 3);
+var tQ  = cQ - 1;
+var tY  = cY;
+if (tQ &lt; 1) { tQ = 4; tY = cY - 1; }
+var periodo_limite = "" + tY + tQ;
+
+var manter = (periodo &lt;= periodo_limite) ? "S" : "N";
+        </jsScript_script>
+      </jsScript>
+    </jsScripts>
+    <fields>
+      <field>
+        <name>periodo</name>
+        <rename>periodo</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>
+      <field>
+        <name>manter</name>
+        <rename>manter</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>480</xloc>
+      <yloc>176</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>JavaScript - Monta URL</name>
+    <type>ScriptValueMod</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <compatible>Y</compatible>
+    <optimizationLevel>9</optimizationLevel>
+    <jsScripts>
+      <jsScript>
+        <jsScript_type>0</jsScript_type>
+        <jsScript_name>Script 1</jsScript_name>
+        <jsScript_script>
+var p = periodo + "";
+var url_completa =
+  "https://olinda.bcb.gov.br/olinda/servico/MPV_DadosAbertos/versao/v1/odata/" +
+  "INFRESTADA(trimestre=@trimestre)" +
+  "?@trimestre=%27" + p + "%27" +
+  "&amp;$format=json" +
+  "&amp;$top=10000";
+        </jsScript_script>
+      </jsScript>
+    </jsScripts>
+    <fields>
+      <field>
+        <name>url_completa</name>
+        <rename>url_completa</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>864</xloc>
+      <yloc>176</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>REST Client - BCB API INFRESTADA</name>
+    <type>Rest</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <applicationType>JSON</applicationType>
+    <method>GET</method>
+    <url/>
+    <urlInField>Y</urlInField>
+    <dynamicMethod>N</dynamicMethod>
+    <methodFieldName/>
+    <urlField>url_completa</urlField>
+    <bodyField/>
+    <httpLogin/>
+    <httpPassword>Encrypted </httpPassword>
+    <proxyHost/>
+    <proxyPort/>
+    <preemptive>N</preemptive>
+    <trustStoreFile/>
+    <trustStorePassword>Encrypted </trustStorePassword>
+    <headers>
+      </headers>
+    <parameters>
+      </parameters>
+    <matrixParameters>
+      </matrixParameters>
+    <result>
+      <name>api_response</name>
+      <code>http_status</code>
+      <response_time/>
+      <response_header/>
+    </result>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>1056</xloc>
+      <yloc>176</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Table Input - Truncate STG e Gera Periodos</name>
+    <type>TableInput</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -706,94 +1121,40 @@ var url_completa =
       <schema_name/>
     </partitioning>
     <connection>Banco SAD</connection>
-    <cache>Y</cache>
-    <cache_load_all>Y</cache_load_all>
-    <cache_size>0</cache_size>
-    <lookup>
-      <schema>dm_financeiro</schema>
-      <table>dim_local</table>
-      <orderby/>
-      <fail_on_multiple>N</fail_on_multiple>
-      <eat_row_on_failure>N</eat_row_on_failure>
-      <key>
-        <name>UFEstabelecimento</name>
-        <field>loc_uf</field>
-        <condition>=</condition>
-        <name2/>
-      </key>
-      <value>
-        <name>loc_sk</name>
-        <rename>ter_sk_local</rename>
-        <default/>
-        <type>Integer</type>
-      </value>
-    </lookup>
+    <sql>WITH limpa AS (
+  DELETE FROM dm_financeiro.stg_terminais_estab
+  WHERE '${TRIMESTRE}' = ''
+     OR ter_sk_tempo IN (
+          SELECT tempo_sk
+          FROM dm_financeiro.dim_tempo
+          WHERE temp_ano_trimestre = '${TRIMESTRE}'
+        )
+)
+SELECT gs AS seq
+FROM generate_series(0, 59) gs
+WHERE '${TRIMESTRE}' = ''
+   OR concat(2019 + gs/4, (gs % 4) + 1)::text = '${TRIMESTRE}'</sql>
+    <limit>0</limit>
+    <lookup/>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>Y</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+    <cached_row_meta_active>N</cached_row_meta_active>
+    <row-meta/>
     <attributes/>
     <cluster_schema/>
     <remotesteps>
-      <input/>
-      <output/>
+      <input>
+      </input>
+      <output>
+      </output>
     </remotesteps>
     <GUI>
-      <xloc>1280</xloc>
-      <yloc>288</yloc>
+      <xloc>256</xloc>
+      <yloc>176</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
-
-  <!-- ============================================================ -->
-  <!-- STEP 8: Lookup dim_tempo por trimestre                       -->
-  <!-- ============================================================ -->
-  <step>
-    <name>Database Lookup - dim_tempo</name>
-    <type>DBLookup</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <connection>Banco SAD</connection>
-    <cache>Y</cache>
-    <cache_load_all>Y</cache_load_all>
-    <cache_size>0</cache_size>
-    <lookup>
-      <schema>dm_financeiro</schema>
-      <table>dim_tempo</table>
-      <orderby/>
-      <fail_on_multiple>N</fail_on_multiple>
-      <eat_row_on_failure>N</eat_row_on_failure>
-      <key>
-        <name>trimestre</name>
-        <field>temp_ano_trimestre</field>
-        <condition>=</condition>
-        <name2/>
-      </key>
-      <value>
-        <name>tempo_sk</name>
-        <rename>ter_sk_tempo</rename>
-        <default/>
-        <type>Integer</type>
-      </value>
-    </lookup>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input/>
-      <output/>
-    </remotesteps>
-    <GUI>
-      <xloc>1472</xloc>
-      <yloc>288</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-
-  <!-- ============================================================ -->
-  <!-- STEP 9: Grava na stg_terminais_estab                         -->
-  <!-- ============================================================ -->
   <step>
     <name>Table Output - stg_terminais_estab</name>
     <type>TableOutput</type>
@@ -851,18 +1212,21 @@ var url_completa =
     <attributes/>
     <cluster_schema/>
     <remotesteps>
-      <input/>
-      <output/>
+      <input>
+      </input>
+      <output>
+      </output>
     </remotesteps>
     <GUI>
-      <xloc>1664</xloc>
-      <yloc>288</yloc>
+      <xloc>304</xloc>
+      <yloc>336</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
-
-  <step_error_handling/>
-  <slave-step-copy-partition-distribution/>
+  <step_error_handling>
+  </step_error_handling>
+  <slave-step-copy-partition-distribution>
+  </slave-step-copy-partition-distribution>
   <slave_transformation>N</slave_transformation>
   <attributes/>
 </transformation>

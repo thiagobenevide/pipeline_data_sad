@@ -87,7 +87,7 @@ Este pipeline consome dados trimestrais da API pública do Banco Central do Bras
                                           │
                     ┌─────────────────────▼──────────────────────┐
                     │         Acesso via WireGuard VPN            │
-                    │         Host: 10.0.0.1  Porta: 8594        │
+                    │         Host: <HOSTVPN>  Porta: <PORT>        │
                     └─────────────────────────────────────────────┘
 ```
 
@@ -262,7 +262,7 @@ pipeline_data_sad/
 │   └── init-db.sh                     # Script de restore do dump no container
 │
 ├── backup/
-│   └── bcbdb                          # Dump binário do banco (pg_restore)
+│   └── <DATABASE>                          # Dump binário do banco (pg_restore)
 │
 ├── .env                               # Credenciais do banco (não versionado)
 ├── .gitignore
@@ -471,9 +471,9 @@ Gera Periodos (60 linhas)
 
 ```dockerfile
 FROM postgres:18
-LABEL project="pipeline-sad" environment="producao" database="bcbdb"
+LABEL project="pipeline-sad" environment="producao" database="<DATABASE>"
 
-COPY backup/bcbdb /tmp/bcbdb.dump
+COPY backup/<DATABASE> /tmp/<DATABASE>.dump
 COPY docker/init-db.sh /docker-entrypoint-initdb.d/01_init-db.sh
 RUN chmod +x /docker-entrypoint-initdb.d/01_init-db.sh
 
@@ -487,7 +487,7 @@ EXPOSE 5432
 #!/bin/bash
 set -e
 pg_restore -U "$POSTGRES_USER" -d "$POSTGRES_DB" \
-  --no-owner --role="$POSTGRES_USER" /tmp/bcbdb.dump
+  --no-owner --role="$POSTGRES_USER" /tmp/<DATABASE>.dump
 ```
 
 ### Gerenciamento com `sad.sh`
@@ -509,8 +509,8 @@ pg_restore -U "$POSTGRES_USER" -d "$POSTGRES_DB" \
 |---|---|
 | Nome do container | `pipeline-sad-db` |
 | Volume | `pipeline-sad-pgdata` → `/var/lib/postgresql` |
-| Porta exposta | `8594` (host) → `5432` (container) |
-| IP de bind | `10.0.0.1` (WireGuard) |
+| Porta exposta | `<PORT>` (host) → `5432` (container) |
+| IP de bind | `<HOSTVPN>` (WireGuard) |
 | Política de restart | `unless-stopped` |
 
 ---
@@ -522,18 +522,18 @@ pg_restore -U "$POSTGRES_USER" -d "$POSTGRES_DB" \
 Criar o arquivo `.env` na raiz do projeto (nunca versionar):
 
 ```env
-POSTGRES_DB=bcbdb
-POSTGRES_USER=caraveianame
+POSTGRES_DB=<DATABASE>
+POSTGRES_USER=<USER>
 POSTGRES_PASSWORD=<senha_segura>
 ```
 
 Configurar no Pentaho via `kettle.properties` (em `~/.kettle/`):
 
 ```properties
-DB_HOST_SAD=10.0.0.1
-DB_NAME_SAD=bcbdb
-DB_PORT_SAD=8594
-DB_USER_SAD=caraveianame
+DB_HOST_SAD=<HOSTVPN>
+DB_NAME_SAD=<DATABASE>
+DB_PORT_SAD=<PORT>
+DB_USER_SAD=<USER>
 DB_PASSWORD_SAD=<senha_segura>
 ```
 
@@ -581,10 +581,10 @@ kitchen.sh -file="jobs/job_fato_transacoes.kjb" -param:TRIMESTRE=20241 -level=Ba
 
 ```bash
 # Via Docker (na VPS)
-docker exec -it pipeline-sad-db psql -U caraveianame -d bcbdb
+docker exec -it pipeline-sad-db psql -U <USER> -d <DATABASE>
 
 # Via psql local (requer WireGuard ativo)
-psql -h 10.0.0.1 -p 8594 -U caraveianame -d bcbdb
+psql -h <HOSTVPN> -p <PORT> -U <USER> -d <DATABASE>
 ```
 
 ---
@@ -596,8 +596,8 @@ psql -h 10.0.0.1 -p 8594 -U caraveianame -d bcbdb
 O banco de dados **não é acessível pela internet**. Toda conexão passa pela VPN WireGuard:
 
 - Rede: `10.0.0.0/24`
-- IP do servidor: `10.0.0.1`
-- O container expõe a porta `8594` apenas no IP WireGuard
+- IP do servidor: `<HOSTVPN>`
+- O container expõe a porta `<PORT>` apenas no IP WireGuard
 
 ### Variáveis de Ambiente
 

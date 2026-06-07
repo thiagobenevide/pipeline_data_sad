@@ -590,8 +590,8 @@ var url_completa =
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1136</xloc>
-      <yloc>496</yloc>
+      <xloc>848</xloc>
+      <yloc>144</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -656,8 +656,8 @@ var url_completa =
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1744</xloc>
-      <yloc>640</yloc>
+      <xloc>1168</xloc>
+      <yloc>288</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -704,8 +704,8 @@ var url_completa =
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1248</xloc>
-      <yloc>640</yloc>
+      <xloc>928</xloc>
+      <yloc>288</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -748,8 +748,8 @@ var url_completa =
       </output>
     </remotesteps>
     <GUI>
-      <xloc>784</xloc>
-      <yloc>496</yloc>
+      <xloc>560</xloc>
+      <yloc>144</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -949,8 +949,8 @@ var url_completa =
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1456</xloc>
-      <yloc>496</yloc>
+      <xloc>1168</xloc>
+      <yloc>144</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1019,8 +1019,8 @@ var manter = (periodo &lt;= periodo_limite) ? "S" : "N";
       </output>
     </remotesteps>
     <GUI>
-      <xloc>608</xloc>
-      <yloc>496</yloc>
+      <xloc>320</xloc>
+      <yloc>144</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1071,8 +1071,8 @@ var manter = (periodo &lt;= periodo_limite) ? "S" : "N";
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1296</xloc>
-      <yloc>496</yloc>
+      <xloc>1008</xloc>
+      <yloc>144</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1121,8 +1121,8 @@ var manter = (periodo &lt;= periodo_limite) ? "S" : "N";
       </output>
     </remotesteps>
     <GUI>
-      <xloc>400</xloc>
-      <yloc>640</yloc>
+      <xloc>624</xloc>
+      <yloc>288</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1167,8 +1167,8 @@ WHERE '${TRIMESTRE}' = ''
       </output>
     </remotesteps>
     <GUI>
-      <xloc>400</xloc>
-      <yloc>496</yloc>
+      <xloc>112</xloc>
+      <yloc>144</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1243,8 +1243,8 @@ WHERE '${TRIMESTRE}' = ''
       </output>
     </remotesteps>
     <GUI>
-      <xloc>704</xloc>
-      <yloc>864</yloc>
+      <xloc>144</xloc>
+      <yloc>288</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1283,7 +1283,7 @@ WHERE '${TRIMESTRE}' = ''
     </remotesteps>
     <GUI>
       <xloc>400</xloc>
-      <yloc>864</yloc>
+      <yloc>288</yloc>
       <draw>Y</draw>
     </GUI>
   </step>

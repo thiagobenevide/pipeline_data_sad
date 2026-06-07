@@ -596,8 +596,8 @@ var url_completa =
       </output>
     </remotesteps>
     <GUI>
-      <xloc>720</xloc>
-      <yloc>240</yloc>
+      <xloc>784</xloc>
+      <yloc>144</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -662,8 +662,8 @@ var url_completa =
       </output>
     </remotesteps>
     <GUI>
-      <xloc>720</xloc>
-      <yloc>400</yloc>
+      <xloc>576</xloc>
+      <yloc>304</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -697,8 +697,8 @@ var url_completa =
       </output>
     </remotesteps>
     <GUI>
-      <xloc>480</xloc>
-      <yloc>400</yloc>
+      <xloc>384</xloc>
+      <yloc>304</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -741,8 +741,8 @@ var url_completa =
       </output>
     </remotesteps>
     <GUI>
-      <xloc>560</xloc>
-      <yloc>240</yloc>
+      <xloc>608</xloc>
+      <yloc>144</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -773,8 +773,8 @@ var url_completa =
       </output>
     </remotesteps>
     <GUI>
-      <xloc>80</xloc>
-      <yloc>240</yloc>
+      <xloc>96</xloc>
+      <yloc>144</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -883,8 +883,8 @@ var url_completa =
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1008</xloc>
-      <yloc>240</yloc>
+      <xloc>1216</xloc>
+      <yloc>144</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -954,8 +954,8 @@ var manter = (periodo &lt;= periodo_alvo) ? "S" : "N";
       </output>
     </remotesteps>
     <GUI>
-      <xloc>400</xloc>
-      <yloc>240</yloc>
+      <xloc>416</xloc>
+      <yloc>144</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1006,8 +1006,8 @@ var manter = (periodo &lt;= periodo_alvo) ? "S" : "N";
       </output>
     </remotesteps>
     <GUI>
-      <xloc>848</xloc>
-      <yloc>240</yloc>
+      <xloc>960</xloc>
+      <yloc>144</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1050,8 +1050,8 @@ var manter = (periodo &lt;= periodo_alvo) ? "S" : "N";
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1200</xloc>
-      <yloc>240</yloc>
+      <xloc>1216</xloc>
+      <yloc>304</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1085,8 +1085,8 @@ var manter = (periodo &lt;= periodo_alvo) ? "S" : "N";
       </output>
     </remotesteps>
     <GUI>
-      <xloc>240</xloc>
-      <yloc>240</yloc>
+      <xloc>256</xloc>
+      <yloc>144</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1151,8 +1151,8 @@ var manter = (periodo &lt;= periodo_alvo) ? "S" : "N";
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1200</xloc>
-      <yloc>400</yloc>
+      <xloc>1024</xloc>
+      <yloc>304</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1211,8 +1211,8 @@ var manter = (periodo &lt;= periodo_alvo) ? "S" : "N";
       </output>
     </remotesteps>
     <GUI>
-      <xloc>288</xloc>
-      <yloc>400</yloc>
+      <xloc>112</xloc>
+      <yloc>304</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1258,8 +1258,8 @@ var manter = (periodo &lt;= periodo_alvo) ? "S" : "N";
       </output>
     </remotesteps>
     <GUI>
-      <xloc>992</xloc>
-      <yloc>400</yloc>
+      <xloc>816</xloc>
+      <yloc>304</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
