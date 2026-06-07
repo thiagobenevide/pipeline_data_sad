@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <transformation>
   <info>
-    <name>fato_terminais</name>
-    <description>Chama API INFRTERMDA (POS/PDV), DELETE + INSERT na fato_terminais</description>
+    <name>fato_terminais_estab</name>
+    <description>Chama API INFRESTADA (estabelecimentos), grava dados em stg_terminais_estab</description>
     <extended_description/>
     <trans_version/>
     <trans_type>Normal</trans_type>
@@ -11,7 +11,7 @@
       <parameter>
         <name>TRIMESTRE</name>
         <default_value/>
-        <description>Trimestre especifico (ex: 20241) ou vazio para carregar todos</description>
+        <description>Trimestre especifico (ex: 20241) ou vazio para atualizar todos</description>
       </parameter>
     </parameters>
     <log>
@@ -243,7 +243,7 @@
   </connection>
   <order>
     <hop>
-      <from>Table Input - Gera Periodos</from>
+      <from>Table Input - Truncate STG e Gera Periodos</from>
       <to>JavaScript - Calcula Periodo</to>
       <enabled>Y</enabled>
     </hop>
@@ -259,11 +259,11 @@
     </hop>
     <hop>
       <from>JavaScript - Monta URL</from>
-      <to>REST Client - BCB API INFRTERMDA</to>
+      <to>REST Client - BCB API INFRESTADA</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>REST Client - BCB API INFRTERMDA</from>
+      <from>REST Client - BCB API INFRESTADA</from>
       <to>JSON Input - Parseia Response</to>
       <enabled>Y</enabled>
     </hop>
@@ -279,16 +279,16 @@
     </hop>
     <hop>
       <from>Database Lookup - dim_tempo</from>
-      <to>Table Output - fato_terminais</to>
+      <to>Table Output - stg_terminais_estab</to>
       <enabled>Y</enabled>
     </hop>
   </order>
 
   <!-- ============================================================ -->
-  <!-- STEP 1: DELETE registros do trimestre e gera sequencia       -->
+  <!-- STEP 1: TRUNCATE stg e gera sequencia de periodos            -->
   <!-- ============================================================ -->
   <step>
-    <name>Table Input - Gera Periodos</name>
+    <name>Table Input - Truncate STG e Gera Periodos</name>
     <type>TableInput</type>
     <description/>
     <distribute>Y</distribute>
@@ -300,7 +300,7 @@
     </partitioning>
     <connection>Banco SAD</connection>
     <sql>WITH limpa AS (
-  DELETE FROM dm_financeiro.fato_terminais
+  DELETE FROM dm_financeiro.stg_terminais_estab
   WHERE '${TRIMESTRE}' = ''
      OR ter_sk_tempo IN (
           SELECT tempo_sk
@@ -333,7 +333,7 @@ WHERE '${TRIMESTRE}' = ''
   </step>
 
   <!-- ============================================================ -->
-  <!-- STEP 2: Calcula periodo (YYYYQ) a partir do seq              -->
+  <!-- STEP 2: Calcula periodo (YYYYQ)                              -->
   <!-- ============================================================ -->
   <step>
     <name>JavaScript - Calcula Periodo</name>
@@ -353,13 +353,11 @@ WHERE '${TRIMESTRE}' = ''
         <jsScript_type>0</jsScript_type>
         <jsScript_name>Script 1</jsScript_name>
         <jsScript_script>
-// seq 0 = 20191 (2019 Q1), 1 = 20192, ..., 59 = 20244
 var s = parseInt(seq);
 var ano = 2019 + Math.floor(s / 4);
 var q   = (s % 4) + 1;
 var periodo = "" + ano + q;
 
-// Calcula o último trimestre com dados disponíveis (aprox. 90 dias de atraso)
 var d   = new Date();
 var cY  = d.getFullYear();
 var cM  = d.getMonth() + 1;
@@ -405,7 +403,7 @@ var manter = (periodo &lt;= periodo_limite) ? "S" : "N";
   </step>
 
   <!-- ============================================================ -->
-  <!-- STEP 3: Filtra apenas periodos validos (antes do limite)     -->
+  <!-- STEP 3: Filtra periodos validos                              -->
   <!-- ============================================================ -->
   <step>
     <name>Filter - Apenas Periodos Validos</name>
@@ -451,7 +449,7 @@ var manter = (periodo &lt;= periodo_limite) ? "S" : "N";
   </step>
 
   <!-- ============================================================ -->
-  <!-- STEP 4: Monta URL para INFRTERMDA                            -->
+  <!-- STEP 4: Monta URL para INFRESTADA                            -->
   <!-- ============================================================ -->
   <step>
     <name>JavaScript - Monta URL</name>
@@ -474,7 +472,7 @@ var manter = (periodo &lt;= periodo_limite) ? "S" : "N";
 var p = periodo + "";
 var url_completa =
   "https://olinda.bcb.gov.br/olinda/servico/MPV_DadosAbertos/versao/v1/odata/" +
-  "INFRTERMDA(trimestre=@trimestre)" +
+  "INFRESTADA(trimestre=@trimestre)" +
   "?@trimestre=%27" + p + "%27" +
   "&amp;$format=json" +
   "&amp;$top=10000";
@@ -505,10 +503,10 @@ var url_completa =
   </step>
 
   <!-- ============================================================ -->
-  <!-- STEP 5: Chamada REST                                         -->
+  <!-- STEP 5: Chamada REST INFRESTADA                              -->
   <!-- ============================================================ -->
   <step>
-    <name>REST Client - BCB API INFRTERMDA</name>
+    <name>REST Client - BCB API INFRESTADA</name>
     <type>Rest</type>
     <description/>
     <distribute>Y</distribute>
@@ -556,7 +554,7 @@ var url_completa =
   </step>
 
   <!-- ============================================================ -->
-  <!-- STEP 6: Parse JSON - campos de INFRTERMDA                    -->
+  <!-- STEP 6: Parse JSON - campos de INFRESTADA                    -->
   <!-- ============================================================ -->
   <step>
     <name>JSON Input - Parseia Response</name>
@@ -603,8 +601,8 @@ var url_completa =
         <repeat>N</repeat>
       </field>
       <field>
-        <name>UFTerminal</name>
-        <path>$.value[*].UFTerminal</path>
+        <name>UFEstabelecimento</name>
+        <path>$.value[*].UFEstabelecimento</path>
         <type>String</type>
         <format/>
         <currency/>
@@ -616,8 +614,8 @@ var url_completa =
         <repeat>N</repeat>
       </field>
       <field>
-        <name>qtdTermPOS</name>
-        <path>$.value[*].qtdTermPOS</path>
+        <name>qtdEstabTotal</name>
+        <path>$.value[*].qtdEstabTotal</path>
         <type>Integer</type>
         <format/>
         <currency/>
@@ -629,8 +627,8 @@ var url_completa =
         <repeat>N</repeat>
       </field>
       <field>
-        <name>qtdTermPOScompartilhados</name>
-        <path>$.value[*].qtdTermPOScompartilhados</path>
+        <name>qtdEstabCapturaManual</name>
+        <path>$.value[*].qtdEstabCapturaManual</path>
         <type>Integer</type>
         <format/>
         <currency/>
@@ -642,8 +640,8 @@ var url_completa =
         <repeat>N</repeat>
       </field>
       <field>
-        <name>qtdTermPOSchip</name>
-        <path>$.value[*].qtdTermPOSchip</path>
+        <name>qtdEstabCapturaEletronica</name>
+        <path>$.value[*].qtdEstabCapturaEletronica</path>
         <type>Integer</type>
         <format/>
         <currency/>
@@ -655,8 +653,8 @@ var url_completa =
         <repeat>N</repeat>
       </field>
       <field>
-        <name>qtdTermPDV</name>
-        <path>$.value[*].qtdTermPDV</path>
+        <name>qtdEstabCapturaRemota</name>
+        <path>$.value[*].qtdEstabCapturaRemota</path>
         <type>Integer</type>
         <format/>
         <currency/>
@@ -694,7 +692,7 @@ var url_completa =
   </step>
 
   <!-- ============================================================ -->
-  <!-- STEP 7: Lookup dim_local por UFTerminal                      -->
+  <!-- STEP 7: Lookup dim_local por UFEstabelecimento               -->
   <!-- ============================================================ -->
   <step>
     <name>Database Lookup - dim_local</name>
@@ -718,7 +716,7 @@ var url_completa =
       <fail_on_multiple>N</fail_on_multiple>
       <eat_row_on_failure>N</eat_row_on_failure>
       <key>
-        <name>UFTerminal</name>
+        <name>UFEstabelecimento</name>
         <field>loc_uf</field>
         <condition>=</condition>
         <name2/>
@@ -794,10 +792,10 @@ var url_completa =
   </step>
 
   <!-- ============================================================ -->
-  <!-- STEP 9: Grava na fato_terminais                              -->
+  <!-- STEP 9: Grava na stg_terminais_estab                         -->
   <!-- ============================================================ -->
   <step>
-    <name>Table Output - fato_terminais</name>
+    <name>Table Output - stg_terminais_estab</name>
     <type>TableOutput</type>
     <description/>
     <distribute>Y</distribute>
@@ -809,7 +807,7 @@ var url_completa =
     </partitioning>
     <connection>Banco SAD</connection>
     <schema>dm_financeiro</schema>
-    <table>fato_terminais</table>
+    <table>stg_terminais_estab</table>
     <commit>1000</commit>
     <truncate>N</truncate>
     <ignore_errors>N</ignore_errors>
@@ -834,20 +832,20 @@ var url_completa =
         <stream_name>ter_sk_local</stream_name>
       </field>
       <field>
-        <column_name>ter_qtdTermPOS</column_name>
-        <stream_name>qtdTermPOS</stream_name>
+        <column_name>qtdEstabTotal</column_name>
+        <stream_name>qtdEstabTotal</stream_name>
       </field>
       <field>
-        <column_name>ter_qtdTermPOScompartilhados</column_name>
-        <stream_name>qtdTermPOScompartilhados</stream_name>
+        <column_name>qtdEstabCapturaManual</column_name>
+        <stream_name>qtdEstabCapturaManual</stream_name>
       </field>
       <field>
-        <column_name>ter_qtdTermPOSchip</column_name>
-        <stream_name>qtdTermPOSchip</stream_name>
+        <column_name>qtdEstabCapturaEletronica</column_name>
+        <stream_name>qtdEstabCapturaEletronica</stream_name>
       </field>
       <field>
-        <column_name>ter_qtdTermPDV</column_name>
-        <stream_name>qtdTermPDV</stream_name>
+        <column_name>qtdEstabCapturaRemota</column_name>
+        <stream_name>qtdEstabCapturaRemota</stream_name>
       </field>
     </fields>
     <attributes/>
