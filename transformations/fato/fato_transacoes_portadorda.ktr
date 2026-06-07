@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <transformation>
   <info>
-    <name>dim_local</name>
-    <description/>
+    <name>fato_transacoes_portadorda</name>
+    <description>Atualiza fato_transacoes com dados de tarifas e pontos de fidelidade (API PORTADORDA do BCB)</description>
     <extended_description/>
     <trans_version/>
     <trans_type>Normal</trans_type>
     <directory>/</directory>
     <parameters>
+      <parameter>
+        <name>TRIMESTRE</name>
+        <default_value/>
+        <description>Trimestre especifico (ex: 20241) ou vazio para atualizar todos</description>
+      </parameter>
     </parameters>
     <log>
       <trans-log-table>
@@ -427,9 +432,9 @@
     <clusterschemas>
     </clusterschemas>
     <created_user>-</created_user>
-    <created_date>2026/06/03 18:31:57.386</created_date>
+    <created_date>2026/06/07 00:00:00.000</created_date>
     <modified_user>-</modified_user>
-    <modified_date>2026/06/06 00:00:00.000</modified_date>
+    <modified_date>2026/06/07 00:00:00.000</modified_date>
     <key_for_session_key>H4sIAAAAAAAAAAMAAAAAAAAAAAA=</key_for_session_key>
     <is_key_private>N</is_key_private>
   </info>
@@ -488,12 +493,7 @@
   </connection>
   <order>
     <hop>
-      <from>Gera Periodos - 60 Linhas</from>
-      <to>Sequence - Indice</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Sequence - Indice</from>
+      <from>Table Input - Gera Periodos</from>
       <to>JavaScript - Calcula Periodo</to>
       <enabled>Y</enabled>
     </hop>
@@ -504,77 +504,37 @@
     </hop>
     <hop>
       <from>Filter - Apenas Periodos Validos</from>
-      <to>Calculator - Monta URL BCB</to>
+      <to>Calculator - Monta URL PORTADORDA</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Calculator - Monta URL BCB</from>
-      <to>REST Client - BCB API</to>
+      <from>Calculator - Monta URL PORTADORDA</from>
+      <to>REST Client - BCB API PORTADORDA</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>REST Client - BCB API</from>
-      <to>JSON Input - Parseia UFTerminal</to>
+      <from>REST Client - BCB API PORTADORDA</from>
+      <to>JSON Input - Parseia Response PORTADORDA</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>JSON Input - Parseia UFTerminal</from>
-      <to>Sort Rows - Para Unique UF</to>
+      <from>JSON Input - Parseia Response PORTADORDA</from>
+      <to>Database Lookup - dim_cartao</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Sort Rows - Para Unique UF</from>
-      <to>Unique Rows - Deduplica UF</to>
+      <from>Database Lookup - dim_cartao</from>
+      <to>Database Lookup - dim_tempo</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Unique Rows - Deduplica UF</from>
-      <to>Calculator - Monta URL IBGE</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Calculator - Monta URL IBGE</from>
-      <to>REST Client - IBGE API</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>REST Client - IBGE API</from>
-      <to>JSON Input - Parseia Estado IBGE</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>JSON Input - Parseia Estado IBGE</from>
-      <to>Filter - Apenas UF Valida</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Filter - Apenas UF Valida</from>
-      <to>JavaScript - Add Lat Lon</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>JavaScript - Add Lat Lon</from>
-      <to>Select Values - Renomeia Campos</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Select Values - Renomeia Campos</from>
-      <to>Database Lookup - Verifica Existente</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Database Lookup - Verifica Existente</from>
-      <to>Filter - Apenas Novos</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Filter - Apenas Novos</from>
-      <to>Table Output - dim_local</to>
+      <from>Database Lookup - dim_tempo</from>
+      <to>Table Output - stg_portadorda</to>
       <enabled>Y</enabled>
     </hop>
   </order>
   <step>
-    <name>Calculator - Monta URL BCB</name>
+    <name>Calculator - Monta URL PORTADORDA</name>
     <type>ScriptValueMod</type>
     <description/>
     <distribute>Y</distribute>
@@ -592,20 +552,19 @@
         <jsScript_name>Script 1</jsScript_name>
         <jsScript_script>
 var p = periodo + "";
-var url_completa =
+var url_portadorda =
   "https://olinda.bcb.gov.br/olinda/servico/MPV_DadosAbertos/versao/v1/odata/" +
-  "INFRTERMDA(trimestre=@trimestre)" +
-  "?@trimestre='" + p + "'" +
+  "PORTADORDA(trimestre=@trimestre)" +
+  "?@trimestre=%27" + p + "%27" +
   "&amp;$format=json" +
-  "&amp;$top=10000" +
-  "&amp;$select=UFTerminal";
+  "&amp;$top=10000";
         </jsScript_script>
       </jsScript>
     </jsScripts>
     <fields>
       <field>
-        <name>url_completa</name>
-        <rename>url_completa</rename>
+        <name>url_portadorda</name>
+        <rename>url_portadorda</rename>
         <type>String</type>
         <length>-1</length>
         <precision>-1</precision>
@@ -621,60 +580,13 @@ var url_completa =
       </output>
     </remotesteps>
     <GUI>
-      <xloc>736</xloc>
-      <yloc>240</yloc>
+      <xloc>752</xloc>
+      <yloc>176</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Calculator - Monta URL IBGE</name>
-    <type>ScriptValueMod</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <compatible>Y</compatible>
-    <optimizationLevel>9</optimizationLevel>
-    <jsScripts>
-      <jsScript>
-        <jsScript_type>0</jsScript_type>
-        <jsScript_name>Script 1</jsScript_name>
-        <jsScript_script>
-var uf = uf_terminal + "";
-var url_ibge = "https://servicodados.ibge.gov.br/api/v1/localidades/estados/" + uf;
-        </jsScript_script>
-      </jsScript>
-    </jsScripts>
-    <fields>
-      <field>
-        <name>url_ibge</name>
-        <rename>url_ibge</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <replace>N</replace>
-      </field>
-    </fields>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>1520</xloc>
-      <yloc>240</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Database Lookup - Verifica Existente</name>
+    <name>Database Lookup - dim_cartao</name>
     <type>DBLookup</type>
     <description/>
     <distribute>Y</distribute>
@@ -685,24 +597,42 @@ var url_ibge = "https://servicodados.ibge.gov.br/api/v1/localidades/estados/" + 
       <schema_name/>
     </partitioning>
     <connection>Banco SAD</connection>
-    <cache>N</cache>
-    <cache_load_all>N</cache_load_all>
-    <cache_size>0</cache_size>
+    <cache>Y</cache>
+    <cache_load_all>Y</cache_load_all>
+    <cache_size>5000</cache_size>
     <lookup>
       <schema>dm_financeiro</schema>
-      <table>dim_local</table>
+      <table>dim_cartao</table>
       <orderby/>
       <fail_on_multiple>N</fail_on_multiple>
       <eat_row_on_failure>N</eat_row_on_failure>
       <key>
-        <name>loc_uf</name>
-        <field>loc_uf</field>
+        <name>bandeira</name>
+        <field>car_bandeira</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <key>
+        <name>funcaoCartao</name>
+        <field>car_funcao</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <key>
+        <name>produto</name>
+        <field>car_produto</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <key>
+        <name>modalidade</name>
+        <field>car_modalidade</field>
         <condition>=</condition>
         <name2/>
       </key>
       <value>
-        <name>loc_sk</name>
-        <rename>existe_flag</rename>
+        <name>cart_sk</name>
+        <rename>tra_sk_cartao</rename>
         <default/>
         <type>Integer</type>
       </value>
@@ -716,14 +646,14 @@ var url_ibge = "https://servicodados.ibge.gov.br/api/v1/localidades/estados/" + 
       </output>
     </remotesteps>
     <GUI>
-      <xloc>448</xloc>
-      <yloc>384</yloc>
+      <xloc>112</xloc>
+      <yloc>336</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Filter - Apenas Novos</name>
-    <type>FilterRows</type>
+    <name>Database Lookup - dim_tempo</name>
+    <type>DBLookup</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -732,16 +662,29 @@ var url_ibge = "https://servicodados.ibge.gov.br/api/v1/localidades/estados/" + 
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <send_true_to>Table Output - dim_local</send_true_to>
-    <send_false_to/>
-    <compare>
-      <condition>
-        <negated>N</negated>
-        <leftvalue>existe_flag</leftvalue>
-        <function>IS NULL</function>
-        <rightvalue/>
-      </condition>
-    </compare>
+    <connection>Banco SAD</connection>
+    <cache>Y</cache>
+    <cache_load_all>Y</cache_load_all>
+    <cache_size>500</cache_size>
+    <lookup>
+      <schema>dm_financeiro</schema>
+      <table>dim_tempo</table>
+      <orderby/>
+      <fail_on_multiple>N</fail_on_multiple>
+      <eat_row_on_failure>N</eat_row_on_failure>
+      <key>
+        <name>trimestre</name>
+        <field>temp_ano_trimestre</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>tempo_sk</name>
+        <rename>tra_sk_tempo</rename>
+        <default/>
+        <type>Integer</type>
+      </value>
+    </lookup>
     <attributes/>
     <cluster_schema/>
     <remotesteps>
@@ -751,8 +694,8 @@ var url_ibge = "https://servicodados.ibge.gov.br/api/v1/localidades/estados/" + 
       </output>
     </remotesteps>
     <GUI>
-      <xloc>256</xloc>
-      <yloc>384</yloc>
+      <xloc>112</xloc>
+      <yloc>528</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -767,7 +710,7 @@ var url_ibge = "https://servicodados.ibge.gov.br/api/v1/localidades/estados/" + 
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <send_true_to>Calculator - Monta URL BCB</send_true_to>
+    <send_true_to>Calculator - Monta URL PORTADORDA</send_true_to>
     <send_false_to/>
     <compare>
       <condition>
@@ -795,80 +738,13 @@ var url_ibge = "https://servicodados.ibge.gov.br/api/v1/localidades/estados/" + 
       </output>
     </remotesteps>
     <GUI>
-      <xloc>560</xloc>
-      <yloc>240</yloc>
+      <xloc>512</xloc>
+      <yloc>176</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Filter - Apenas UF Valida</name>
-    <type>FilterRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <send_true_to>JavaScript - Add Lat Lon</send_true_to>
-    <send_false_to/>
-    <compare>
-      <condition>
-        <negated>Y</negated>
-        <leftvalue>ibge_sigla</leftvalue>
-        <function>IS NULL</function>
-        <rightvalue/>
-      </condition>
-    </compare>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>1040</xloc>
-      <yloc>384</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Gera Periodos - 60 Linhas</name>
-    <type>RowGenerator</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <fields>
-    </fields>
-    <limit>60</limit>
-    <never_ending>N</never_ending>
-    <interval_in_ms>5000</interval_in_ms>
-    <row_time_field>now</row_time_field>
-    <last_time_field>FiveSecondsAgo</last_time_field>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>80</xloc>
-      <yloc>240</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>JSON Input - Parseia Estado IBGE</name>
+    <name>JSON Input - Parseia Response PORTADORDA</name>
     <type>JsonInput</type>
     <description/>
     <distribute>Y</distribute>
@@ -899,8 +775,86 @@ var url_ibge = "https://servicodados.ibge.gov.br/api/v1/localidades/estados/" + 
     </file>
     <fields>
       <field>
-        <name>ibge_id</name>
-        <path>$.id</path>
+        <name>trimestre</name>
+        <path>$.value[*].trimestre</path>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>funcaoCartao</name>
+        <path>$.value[*].funcaoCartao</path>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>bandeira</name>
+        <path>$.value[*].bandeira</path>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>produto</name>
+        <path>$.value[*].produto</path>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>modalidade</name>
+        <path>$.value[*].modalidade</path>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>tarifaAnuidadeMedia</name>
+        <path>$.value[*].tarifaAnuidadeMedia</path>
+        <type>BigNumber</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>30</length>
+        <precision>2</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>qtdPontosAcumulados</name>
+        <path>$.value[*].qtdPontosAcumulados</path>
         <type>Integer</type>
         <format/>
         <currency/>
@@ -912,9 +866,9 @@ var url_ibge = "https://servicodados.ibge.gov.br/api/v1/localidades/estados/" + 
         <repeat>N</repeat>
       </field>
       <field>
-        <name>ibge_sigla</name>
-        <path>$.sigla</path>
-        <type>String</type>
+        <name>qtdPontosAdquiridos</name>
+        <path>$.value[*].qtdPontosAdquiridos</path>
+        <type>Integer</type>
         <format/>
         <currency/>
         <decimal/>
@@ -925,9 +879,9 @@ var url_ibge = "https://servicodados.ibge.gov.br/api/v1/localidades/estados/" + 
         <repeat>N</repeat>
       </field>
       <field>
-        <name>ibge_nome</name>
-        <path>$.nome</path>
-        <type>String</type>
+        <name>qtdPontosConvertidos</name>
+        <path>$.value[*].qtdPontosConvertidos</path>
+        <type>Integer</type>
         <format/>
         <currency/>
         <decimal/>
@@ -938,9 +892,9 @@ var url_ibge = "https://servicodados.ibge.gov.br/api/v1/localidades/estados/" + 
         <repeat>N</repeat>
       </field>
       <field>
-        <name>ibge_regiao</name>
-        <path>$.regiao.nome</path>
-        <type>String</type>
+        <name>qtdPontosExpirados</name>
+        <path>$.value[*].qtdPontosExpirados</path>
+        <type>Integer</type>
         <format/>
         <currency/>
         <decimal/>
@@ -950,74 +904,16 @@ var url_ibge = "https://servicodados.ibge.gov.br/api/v1/localidades/estados/" + 
         <trim_type>none</trim_type>
         <repeat>N</repeat>
       </field>
-    </fields>
-    <limit>0</limit>
-    <IsInFields>Y</IsInFields>
-    <IsAFile>N</IsAFile>
-    <valueField>ibge_response</valueField>
-    <shortFileFieldName/>
-    <pathFieldName/>
-    <hiddenFieldName/>
-    <lastModificationTimeFieldName/>
-    <uriNameFieldName/>
-    <rootUriNameFieldName/>
-    <extensionFieldName/>
-    <sizeFieldName/>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>1216</xloc>
-      <yloc>384</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>JSON Input - Parseia UFTerminal</name>
-    <type>JsonInput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <include>N</include>
-    <include_field/>
-    <rownum>N</rownum>
-    <addresultfile>N</addresultfile>
-    <readurl>N</readurl>
-    <removeSourceField>N</removeSourceField>
-    <IsIgnoreEmptyFile>Y</IsIgnoreEmptyFile>
-    <doNotFailIfNoFile>Y</doNotFailIfNoFile>
-    <ignoreMissingPath>Y</ignoreMissingPath>
-    <defaultPathLeafToNull>Y</defaultPathLeafToNull>
-    <includeNulls>N</includeNulls>
-    <rownum_field/>
-    <file>
-      <name/>
-      <filemask/>
-      <exclude_filemask/>
-      <file_required/>
-      <include_subfolders/>
-    </file>
-    <fields>
       <field>
-        <name>uf_terminal</name>
-        <path>$.value[*].UFTerminal</path>
-        <type>String</type>
+        <name>valorGastoProgramaRecompra</name>
+        <path>$.value[*].valorGastoProgramaRecompra</path>
+        <type>BigNumber</type>
         <format/>
         <currency/>
         <decimal/>
         <group/>
-        <length>-1</length>
-        <precision>-1</precision>
+        <length>30</length>
+        <precision>2</precision>
         <trim_type>none</trim_type>
         <repeat>N</repeat>
       </field>
@@ -1043,96 +939,8 @@ var url_ibge = "https://servicodados.ibge.gov.br/api/v1/localidades/estados/" + 
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1040</xloc>
-      <yloc>240</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>JavaScript - Add Lat Lon</name>
-    <type>ScriptValueMod</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <compatible>Y</compatible>
-    <optimizationLevel>9</optimizationLevel>
-    <jsScripts>
-      <jsScript>
-        <jsScript_type>0</jsScript_type>
-        <jsScript_name>Script 1</jsScript_name>
-        <jsScript_script>
-// Centroides geograficos (latitude/longitude) de cada estado brasileiro
-var centroides = {
-  "AC": { lat: "-9.0238",  lon: "-70.8120" },
-  "AL": { lat: "-9.5713",  lon: "-36.7820" },
-  "AM": { lat: "-3.4168",  lon: "-65.8561" },
-  "AP": { lat: "1.4102",   lon: "-51.7703" },
-  "BA": { lat: "-12.5797", lon: "-41.7007" },
-  "CE": { lat: "-5.4984",  lon: "-39.3206" },
-  "DF": { lat: "-15.7801", lon: "-47.9292" },
-  "ES": { lat: "-19.1834", lon: "-40.3089" },
-  "GO": { lat: "-15.8270", lon: "-49.8362" },
-  "MA": { lat: "-5.4220",  lon: "-45.4426" },
-  "MG": { lat: "-18.5122", lon: "-44.5550" },
-  "MS": { lat: "-20.7722", lon: "-54.7852" },
-  "MT": { lat: "-12.6819", lon: "-56.9211" },
-  "PA": { lat: "-3.4168",  lon: "-52.2111" },
-  "PB": { lat: "-7.2399",  lon: "-36.7819" },
-  "PE": { lat: "-8.8137",  lon: "-36.9541" },
-  "PI": { lat: "-7.7183",  lon: "-42.7289" },
-  "PR": { lat: "-25.2521", lon: "-52.0215" },
-  "RJ": { lat: "-22.9035", lon: "-43.1724" },
-  "RN": { lat: "-5.8127",  lon: "-36.2492" },
-  "RO": { lat: "-10.9161", lon: "-62.0775" },
-  "RR": { lat: "1.9900",   lon: "-61.3300" },
-  "RS": { lat: "-30.0346", lon: "-51.2177" },
-  "SC": { lat: "-27.2423", lon: "-50.2189" },
-  "SE": { lat: "-10.5741", lon: "-37.3857" },
-  "SP": { lat: "-22.9099", lon: "-48.2020" },
-  "TO": { lat: "-10.1753", lon: "-48.2982" }
-};
-
-var sigla = ibge_sigla + "";
-var centroide = centroides[sigla];
-var loc_latidude  = centroide ? centroide.lat : "0";
-var loc_longitude = centroide ? centroide.lon : "0";
-        </jsScript_script>
-      </jsScript>
-    </jsScripts>
-    <fields>
-      <field>
-        <name>loc_latidude</name>
-        <rename>loc_latidude</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <replace>N</replace>
-      </field>
-      <field>
-        <name>loc_longitude</name>
-        <rename>loc_longitude</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <replace>N</replace>
-      </field>
-    </fields>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>864</xloc>
-      <yloc>384</yloc>
+      <xloc>512</xloc>
+      <yloc>336</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1154,24 +962,21 @@ var loc_longitude = centroide ? centroide.lon : "0";
         <jsScript_type>0</jsScript_type>
         <jsScript_name>Script 1</jsScript_name>
         <jsScript_script>
-// seq 0 = 20191, seq 1 = 20192, seq 2 = 20193, seq 3 = 20194, seq 4 = 20201, ...
 var s = parseInt(seq);
 var ano = 2019 + Math.floor(s / 4);
-var trimestre = (s % 4) + 1;
-var periodo = "" + ano + trimestre;
+var q   = (s % 4) + 1;
+var periodo = "" + ano + q;
 
-// Trimestre alvo: anterior ao atual (API disponibiliza com ~2 meses de atraso)
-var d = new Date();
-var curY = d.getFullYear();
-var curM = d.getMonth() + 1;
-var curQ = Math.ceil(curM / 3);
-var tQ = curQ - 1;
-var tY = curY;
-if (tQ &lt; 1) { tQ = 4; tY = curY - 1; }
-var periodo_alvo = "" + tY + tQ;
+var d   = new Date();
+var cY  = d.getFullYear();
+var cM  = d.getMonth() + 1;
+var cQ  = Math.ceil(cM / 3);
+var tQ  = cQ - 1;
+var tY  = cY;
+if (tQ &lt; 1) { tQ = 4; tY = cY - 1; }
+var periodo_limite = "" + tY + tQ;
 
-// manter = "S" somente se este periodo estiver dentro do intervalo valido
-var manter = (periodo &lt;= periodo_alvo) ? "S" : "N";
+var manter = (periodo &lt;= periodo_limite) ? "S" : "N";
         </jsScript_script>
       </jsScript>
     </jsScripts>
@@ -1202,13 +1007,13 @@ var manter = (periodo &lt;= periodo_alvo) ? "S" : "N";
       </output>
     </remotesteps>
     <GUI>
-      <xloc>400</xloc>
-      <yloc>240</yloc>
+      <xloc>288</xloc>
+      <yloc>176</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>REST Client - BCB API</name>
+    <name>REST Client - BCB API PORTADORDA</name>
     <type>Rest</type>
     <description/>
     <distribute>Y</distribute>
@@ -1224,7 +1029,7 @@ var manter = (periodo &lt;= periodo_alvo) ? "S" : "N";
     <urlInField>Y</urlInField>
     <dynamicMethod>N</dynamicMethod>
     <methodFieldName/>
-    <urlField>url_completa</urlField>
+    <urlField>url_portadorda</urlField>
     <bodyField/>
     <httpLogin/>
     <httpPassword>Encrypted </httpPassword>
@@ -1254,14 +1059,14 @@ var manter = (periodo &lt;= periodo_alvo) ? "S" : "N";
       </output>
     </remotesteps>
     <GUI>
-      <xloc>880</xloc>
-      <yloc>240</yloc>
+      <xloc>752</xloc>
+      <yloc>336</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>REST Client - IBGE API</name>
-    <type>Rest</type>
+    <name>Table Input - Gera Periodos</name>
+    <type>TableInput</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -1270,33 +1075,18 @@ var manter = (periodo &lt;= periodo_alvo) ? "S" : "N";
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <applicationType>JSON</applicationType>
-    <method>GET</method>
-    <url/>
-    <urlInField>Y</urlInField>
-    <dynamicMethod>N</dynamicMethod>
-    <methodFieldName/>
-    <urlField>url_ibge</urlField>
-    <bodyField/>
-    <httpLogin/>
-    <httpPassword>Encrypted </httpPassword>
-    <proxyHost/>
-    <proxyPort/>
-    <preemptive>N</preemptive>
-    <trustStoreFile/>
-    <trustStorePassword>Encrypted </trustStorePassword>
-    <headers>
-      </headers>
-    <parameters>
-      </parameters>
-    <matrixParameters>
-      </matrixParameters>
-    <result>
-      <name>ibge_response</name>
-      <code>ibge_http_status</code>
-      <response_time/>
-      <response_header/>
-    </result>
+    <connection>Banco SAD</connection>
+    <sql>SELECT gs AS seq
+FROM generate_series(0, 59) gs
+WHERE '${TRIMESTRE}' = ''
+   OR concat(2019 + gs/4, (gs % 4) + 1)::text = '${TRIMESTRE}'</sql>
+    <limit>0</limit>
+    <lookup/>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>Y</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+    <cached_row_meta_active>N</cached_row_meta_active>
+    <row-meta/>
     <attributes/>
     <cluster_schema/>
     <remotesteps>
@@ -1306,142 +1096,13 @@ var manter = (periodo &lt;= periodo_alvo) ? "S" : "N";
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1520</xloc>
-      <yloc>384</yloc>
+      <xloc>128</xloc>
+      <yloc>176</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Select Values - Renomeia Campos</name>
-    <type>SelectValues</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <fields>
-      <field>
-        <name>ibge_sigla</name>
-        <rename>loc_uf</rename>
-      </field>
-      <field>
-        <name>ibge_nome</name>
-        <rename>loc_estado</rename>
-      </field>
-      <field>
-        <name>loc_latidude</name>
-        <rename>loc_latidude</rename>
-      </field>
-      <field>
-        <name>loc_longitude</name>
-        <rename>loc_longitude</rename>
-      </field>
-      <field>
-        <name>ibge_id</name>
-        <rename>loc_cod_ibge</rename>
-      </field>
-      <field>
-        <name>ibge_regiao</name>
-        <rename>loc_regicao</rename>
-      </field>
-      <select_unspecified>N</select_unspecified>
-    </fields>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>672</xloc>
-      <yloc>384</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Sequence - Indice</name>
-    <type>Sequence</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <valuename>seq</valuename>
-    <use_database>N</use_database>
-    <connection/>
-    <schema/>
-    <seqname>SEQ_</seqname>
-    <use_counter>Y</use_counter>
-    <counter_name/>
-    <start_at>0</start_at>
-    <increment_by>1</increment_by>
-    <max_value>999999999</max_value>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>240</xloc>
-      <yloc>240</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Sort Rows - Para Unique UF</name>
-    <type>SortRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <directory>%%java.io.tmpdir%%</directory>
-    <prefix>out</prefix>
-    <sort_size>1000000</sort_size>
-    <free_memory>25</free_memory>
-    <compress>N</compress>
-    <compress_variable/>
-    <unique_rows>N</unique_rows>
-    <fields>
-      <field>
-        <name>uf_terminal</name>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <collator_enabled>N</collator_enabled>
-        <collator_strength>2</collator_strength>
-        <presorted>N</presorted>
-      </field>
-    </fields>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>1200</xloc>
-      <yloc>240</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Table Output - dim_local</name>
+    <name>Table Output - stg_portadorda</name>
     <type>TableOutput</type>
     <description/>
     <distribute>Y</distribute>
@@ -1452,10 +1113,10 @@ var manter = (periodo &lt;= periodo_alvo) ? "S" : "N";
       <schema_name/>
     </partitioning>
     <connection>Banco SAD</connection>
-    <schema>public</schema>
-    <table>dim_local</table>
-    <commit>1000</commit>
-    <truncate>N</truncate>
+    <schema>dm_financeiro</schema>
+    <table>stg_portadorda</table>
+    <commit>5000</commit>
+    <truncate>Y</truncate>
     <ignore_errors>N</ignore_errors>
     <use_batch>Y</use_batch>
     <specify_fields>Y</specify_fields>
@@ -1470,28 +1131,36 @@ var manter = (periodo &lt;= periodo_alvo) ? "S" : "N";
     <return_field/>
     <fields>
       <field>
-        <column_name>loc_uf</column_name>
-        <stream_name>loc_uf</stream_name>
+        <column_name>tra_sk_cartao</column_name>
+        <stream_name>tra_sk_cartao</stream_name>
       </field>
       <field>
-        <column_name>loc_estado</column_name>
-        <stream_name>loc_estado</stream_name>
+        <column_name>tra_sk_tempo</column_name>
+        <stream_name>tra_sk_tempo</stream_name>
       </field>
       <field>
-        <column_name>loc_latidude</column_name>
-        <stream_name>loc_latidude</stream_name>
+        <column_name>tarifaAnuidadeMedia</column_name>
+        <stream_name>tarifaAnuidadeMedia</stream_name>
       </field>
       <field>
-        <column_name>loc_longitude</column_name>
-        <stream_name>loc_longitude</stream_name>
+        <column_name>qtdPontosAcumulados</column_name>
+        <stream_name>qtdPontosAcumulados</stream_name>
       </field>
       <field>
-        <column_name>loc_cod_ibge</column_name>
-        <stream_name>loc_cod_ibge</stream_name>
+        <column_name>qtdPontosAdquiridos</column_name>
+        <stream_name>qtdPontosAdquiridos</stream_name>
       </field>
       <field>
-        <column_name>loc_regicao</column_name>
-        <stream_name>loc_regicao</stream_name>
+        <column_name>qtdPontosConvertidos</column_name>
+        <stream_name>qtdPontosConvertidos</stream_name>
+      </field>
+      <field>
+        <column_name>qtdPontosExpirados</column_name>
+        <stream_name>qtdPontosExpirados</stream_name>
+      </field>
+      <field>
+        <column_name>valorGastoProgramaRecompra</column_name>
+        <stream_name>valorGastoProgramaRecompra</stream_name>
       </field>
     </fields>
     <attributes/>
@@ -1503,43 +1172,8 @@ var manter = (periodo &lt;= periodo_alvo) ? "S" : "N";
       </output>
     </remotesteps>
     <GUI>
-      <xloc>80</xloc>
-      <yloc>384</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Unique Rows - Deduplica UF</name>
-    <type>Unique</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <count_rows>N</count_rows>
-    <count_field/>
-    <reject_duplicate_row>N</reject_duplicate_row>
-    <error_description/>
-    <fields>
-      <field>
-        <name>uf_terminal</name>
-        <case_insensitive>N</case_insensitive>
-      </field>
-    </fields>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>1360</xloc>
-      <yloc>240</yloc>
+      <xloc>528</xloc>
+      <yloc>528</yloc>
       <draw>Y</draw>
     </GUI>
   </step>

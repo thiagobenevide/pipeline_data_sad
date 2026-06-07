@@ -547,31 +547,6 @@
       <to>Table Output - dim_cartao</to>
       <enabled>Y</enabled>
     </hop>
-    <hop>
-      <from>Unique Rows - Deduplica</from>
-      <to>Select Values - Renomeia Campos dim_bandeira</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Select Values - Renomeia Campos dim_bandeira</from>
-      <to>Unique Rows - Remover a Duplicação</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Unique Rows - Remover a Duplicação</from>
-      <to>Database Lookup - Verifica Existente DB</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Database Lookup - Verifica Existente DB</from>
-      <to>Filter - Apenas Novos DB</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Filter - Apenas Novos DB</from>
-      <to>Table Output - dim_cartao_tipo</to>
-      <enabled>Y</enabled>
-    </hop>
   </order>
   <step>
     <name>Calculator - Monta URL</name>
@@ -689,95 +664,6 @@ var url_completa =
     <GUI>
       <xloc>720</xloc>
       <yloc>400</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Database Lookup - Verifica Existente DB</name>
-    <type>DBLookup</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <connection>Banco SAD</connection>
-    <cache>N</cache>
-    <cache_load_all>N</cache_load_all>
-    <cache_size>0</cache_size>
-    <lookup>
-      <schema>dm_financeiro</schema>
-      <table>dim_cartao_tipo</table>
-      <orderby/>
-      <fail_on_multiple>N</fail_on_multiple>
-      <eat_row_on_failure>N</eat_row_on_failure>
-      <key>
-        <name>ct_bandeira</name>
-        <field>ct_bandeira</field>
-        <condition>=</condition>
-        <name2/>
-      </key>
-      <key>
-        <name>ct_funcao</name>
-        <field>ct_funcao</field>
-        <condition>=</condition>
-        <name2/>
-      </key>
-      <value>
-        <name>ct_bandeira</name>
-        <rename>existe_flag_ct</rename>
-        <default/>
-        <type>String</type>
-      </value>
-    </lookup>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>512</xloc>
-      <yloc>576</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Filter - Apenas Novos DB</name>
-    <type>FilterRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <send_true_to>Table Output - dim_cartao_tipo</send_true_to>
-    <send_false_to/>
-    <compare>
-      <condition>
-        <negated>N</negated>
-        <leftvalue>existe_flag_ct</leftvalue>
-        <function>IS NULL</function>
-        <rightvalue/>
-      </condition>
-    </compare>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>320</xloc>
-      <yloc>576</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1170,74 +1056,6 @@ var manter = (periodo &lt;= periodo_alvo) ? "S" : "N";
     </GUI>
   </step>
   <step>
-    <name>Select Values - Renomeia Campos dim_bandeira</name>
-    <type>SelectValues</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <fields>
-      <select_unspecified>N</select_unspecified>
-      <remove>
-        <name>car_produto</name>
-      </remove>
-      <remove>
-        <name>car_modalidade</name>
-      </remove>
-      <meta>
-        <name>car_bandeira</name>
-        <rename>ct_bandeira</rename>
-        <type>String</type>
-        <length>-2</length>
-        <precision>-2</precision>
-        <conversion_mask/>
-        <date_format_lenient>false</date_format_lenient>
-        <date_format_locale/>
-        <date_format_timezone/>
-        <lenient_string_to_number>false</lenient_string_to_number>
-        <encoding/>
-        <decimal_symbol/>
-        <grouping_symbol/>
-        <currency_symbol/>
-        <storage_type/>
-      </meta>
-      <meta>
-        <name>car_funcao</name>
-        <rename>ct_funcao</rename>
-        <type>String</type>
-        <length>-2</length>
-        <precision>-2</precision>
-        <conversion_mask/>
-        <date_format_lenient>false</date_format_lenient>
-        <date_format_locale/>
-        <date_format_timezone/>
-        <lenient_string_to_number>false</lenient_string_to_number>
-        <encoding/>
-        <decimal_symbol/>
-        <grouping_symbol/>
-        <currency_symbol/>
-        <storage_type/>
-      </meta>
-    </fields>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>992</xloc>
-      <yloc>576</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
     <name>Sequence - Indice</name>
     <type>Sequence</type>
     <description/>
@@ -1399,58 +1217,6 @@ var manter = (periodo &lt;= periodo_alvo) ? "S" : "N";
     </GUI>
   </step>
   <step>
-    <name>Table Output - dim_cartao_tipo</name>
-    <type>TableOutput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <connection>Banco SAD</connection>
-    <schema>dm_financeiro</schema>
-    <table>dim_cartao_tipo</table>
-    <commit>1000</commit>
-    <truncate>N</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>Y</use_batch>
-    <specify_fields>Y</specify_fields>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field/>
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>N</return_keys>
-    <return_field/>
-    <fields>
-      <field>
-        <column_name>ct_bandeira</column_name>
-        <stream_name>ct_bandeira</stream_name>
-      </field>
-      <field>
-        <column_name>ct_funcao</column_name>
-        <stream_name>ct_funcao</stream_name>
-      </field>
-    </fields>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>112</xloc>
-      <yloc>576</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
     <name>Unique Rows - Deduplica</name>
     <type>Unique</type>
     <description/>
@@ -1494,45 +1260,6 @@ var manter = (periodo &lt;= periodo_alvo) ? "S" : "N";
     <GUI>
       <xloc>992</xloc>
       <yloc>400</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Unique Rows - Remover a Duplicação</name>
-    <type>Unique</type>
-    <description/>
-    <distribute>N</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <count_rows>N</count_rows>
-    <count_field/>
-    <reject_duplicate_row>N</reject_duplicate_row>
-    <error_description/>
-    <fields>
-      <field>
-        <name>ct_bandeira</name>
-        <case_insensitive>N</case_insensitive>
-      </field>
-      <field>
-        <name>ct_funcao</name>
-        <case_insensitive>N</case_insensitive>
-      </field>
-    </fields>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>736</xloc>
-      <yloc>576</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
