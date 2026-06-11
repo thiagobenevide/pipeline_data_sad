@@ -519,6 +519,11 @@
     </hop>
     <hop>
       <from>JSON Input - Parseia Response PORTADORDA</from>
+      <to>Filter - Apenas Trimestre Solicitado</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Filter - Apenas Trimestre Solicitado</from>
       <to>Database Lookup - dim_cartao</to>
       <enabled>Y</enabled>
     </hop>
@@ -582,6 +587,45 @@ var url_portadorda =
     <GUI>
       <xloc>752</xloc>
       <yloc>176</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <!-- A API PORTADORDA e cumulativa: a chamada do periodo p retorna p, p+1, ... ate o
+       trimestre mais recente. Esta transformacao grava direto na staging (sem dedup/Group By),
+       entao sem este filtro a stg_portadorda receberia cada trimestre repetido varias vezes.
+       Mantem SOMENTE as linhas do trimestre p (trimestre == periodo). -->
+  <step>
+    <name>Filter - Apenas Trimestre Solicitado</name>
+    <type>FilterRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <send_true_to>Database Lookup - dim_cartao</send_true_to>
+    <send_false_to/>
+    <compare>
+      <condition>
+        <negated>N</negated>
+        <leftvalue>trimestre</leftvalue>
+        <function>=</function>
+        <rightvalue>periodo</rightvalue>
+      </condition>
+    </compare>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>992</xloc>
+      <yloc>256</yloc>
       <draw>Y</draw>
     </GUI>
   </step>

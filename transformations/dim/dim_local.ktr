@@ -519,6 +519,11 @@
     </hop>
     <hop>
       <from>JSON Input - Parseia UFTerminal</from>
+      <to>Filter - Apenas Trimestre Solicitado</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Filter - Apenas Trimestre Solicitado</from>
       <to>Sort Rows - Para Unique UF</to>
       <enabled>Y</enabled>
     </hop>
@@ -592,13 +597,16 @@
         <jsScript_name>Script 1</jsScript_name>
         <jsScript_script>
 var p = periodo + "";
+// INFRTERMDA e cumulativo (retorna de p em diante) e NAO suporta $filter (trimestre e
+// Int32, a API responde 400/500). Trazemos trimestre no $select para recortar o trimestre
+// p no passo "Filter - Apenas Trimestre Solicitado" (a dedup de UF acontece depois).
 var url_completa =
   "https://olinda.bcb.gov.br/olinda/servico/MPV_DadosAbertos/versao/v1/odata/" +
   "INFRTERMDA(trimestre=@trimestre)" +
   "?@trimestre='" + p + "'" +
   "&amp;$format=json" +
   "&amp;$top=10000" +
-  "&amp;$select=UFTerminal";
+  "&amp;$select=UFTerminal,trimestre";
         </jsScript_script>
       </jsScript>
     </jsScripts>
@@ -1021,6 +1029,19 @@ var url_ibge = "https://servicodados.ibge.gov.br/api/v1/localidades/estados/" + 
         <trim_type>none</trim_type>
         <repeat>N</repeat>
       </field>
+      <field>
+        <name>trimestre</name>
+        <path>$.value[*].trimestre</path>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
     </fields>
     <limit>0</limit>
     <IsInFields>Y</IsInFields>
@@ -1398,6 +1419,44 @@ var manter = (periodo &lt;= periodo_alvo) ? "S" : "N";
       <draw>Y</draw>
     </GUI>
   </step>
+  <!-- INFRTERMDA e cumulativo: a chamada do periodo p retorna p, p+1, ... ate o trimestre
+       mais recente. Mantem SOMENTE as linhas do trimestre p (trimestre == periodo); a dedup
+       de UF (Sort + Unique) consolida as 27 UFs distintas em seguida. -->
+  <step>
+    <name>Filter - Apenas Trimestre Solicitado</name>
+    <type>FilterRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <send_true_to>Sort Rows - Para Unique UF</send_true_to>
+    <send_false_to/>
+    <compare>
+      <condition>
+        <negated>N</negated>
+        <leftvalue>trimestre</leftvalue>
+        <function>=</function>
+        <rightvalue>periodo</rightvalue>
+      </condition>
+    </compare>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>1120</xloc>
+      <yloc>240</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
   <step>
     <name>Sort Rows - Para Unique UF</name>
     <type>SortRows</type>
@@ -1452,7 +1511,7 @@ var manter = (periodo &lt;= periodo_alvo) ? "S" : "N";
       <schema_name/>
     </partitioning>
     <connection>Banco SAD</connection>
-    <schema>public</schema>
+    <schema>dm_financeiro</schema>
     <table>dim_local</table>
     <commit>1000</commit>
     <truncate>N</truncate>

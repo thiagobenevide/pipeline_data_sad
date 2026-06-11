@@ -562,12 +562,16 @@
         <jsScript_name>Script 1</jsScript_name>
         <jsScript_script>
 var p = periodo + "";
+// O parametro de funcao (trimestre=@trimestre) e cumulativo (retorna de p em diante).
+// Neste endpoint o campo trimestre e string, entao o $filter=trimestre eq 'p' funciona
+// no servidor e ja traz SOMENTE o trimestre p (mesmo padrao usado em dim_cartao).
 var url_completa =
   "https://olinda.bcb.gov.br/olinda/servico/MPV_DadosAbertos/versao/v1/odata/" +
   "Quantidadeetransacoesdecartoes(trimestre=@trimestre)" +
   "?@trimestre=%27" + p + "%27" +
   "&amp;$format=json" +
-  "&amp;$top=10000";
+  "&amp;$top=10000" +
+  "&amp;$filter=trimestre%20eq%20%27" + p + "%27";
         </jsScript_script>
       </jsScript>
     </jsScripts>
