@@ -544,6 +544,11 @@
     </hop>
     <hop>
       <from>Database Lookup - dim_tempo</from>
+      <to>Trata Nulos</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Trata Nulos</from>
       <to>Table Output - stg_terminais_estab</to>
       <enabled>Y</enabled>
     </hop>
@@ -1245,6 +1250,64 @@ WHERE '${TRIMESTRE}' = ''
     <GUI>
       <xloc>304</xloc>
       <yloc>336</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Trata Nulos</name>
+    <type>IfNull</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+    </fields>
+    <valuetypes>
+      <valuetype>
+        <name>String</name>
+        <value/>
+        <mask/>
+        <set_type_value_blank>Y</set_type_value_blank>
+      </valuetype>
+      <valuetype>
+        <name>Integer</name>
+        <value>0</value>
+        <mask/>
+        <set_type_value_blank>N</set_type_value_blank>
+      </valuetype>
+      <valuetype>
+        <name>Number</name>
+        <value>0</value>
+        <mask/>
+        <set_type_value_blank>N</set_type_value_blank>
+      </valuetype>
+      <valuetype>
+        <name>BigNumber</name>
+        <value>0</value>
+        <mask/>
+        <set_type_value_blank>N</set_type_value_blank>
+      </valuetype>
+    </valuetypes>
+    <selectFields>N</selectFields>
+    <selectValuesType>Y</selectValuesType>
+    <replaceAllByValue/>
+    <replaceAllMask/>
+    <setEmptyStringAll>N</setEmptyStringAll>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>488</xloc>
+      <yloc>448</yloc>
       <draw>Y</draw>
     </GUI>
   </step>

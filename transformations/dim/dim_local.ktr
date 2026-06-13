@@ -574,6 +574,11 @@
     </hop>
     <hop>
       <from>Filter - Apenas Novos</from>
+      <to>Trata Nulos</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Trata Nulos</from>
       <to>Table Output - dim_local</to>
       <enabled>Y</enabled>
     </hop>
@@ -740,7 +745,7 @@ var url_ibge = "https://servicodados.ibge.gov.br/api/v1/localidades/estados/" + 
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <send_true_to>Table Output - dim_local</send_true_to>
+    <send_true_to>Trata Nulos</send_true_to>
     <send_false_to/>
     <compare>
       <condition>
@@ -1599,6 +1604,64 @@ var manter = (periodo &lt;= periodo_alvo) ? "S" : "N";
     <GUI>
       <xloc>1360</xloc>
       <yloc>240</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Trata Nulos</name>
+    <type>IfNull</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+    </fields>
+    <valuetypes>
+      <valuetype>
+        <name>String</name>
+        <value/>
+        <mask/>
+        <set_type_value_blank>Y</set_type_value_blank>
+      </valuetype>
+      <valuetype>
+        <name>Integer</name>
+        <value>0</value>
+        <mask/>
+        <set_type_value_blank>N</set_type_value_blank>
+      </valuetype>
+      <valuetype>
+        <name>Number</name>
+        <value>0</value>
+        <mask/>
+        <set_type_value_blank>N</set_type_value_blank>
+      </valuetype>
+      <valuetype>
+        <name>BigNumber</name>
+        <value>0</value>
+        <mask/>
+        <set_type_value_blank>N</set_type_value_blank>
+      </valuetype>
+    </valuetypes>
+    <selectFields>N</selectFields>
+    <selectValuesType>Y</selectValuesType>
+    <replaceAllByValue/>
+    <replaceAllMask/>
+    <setEmptyStringAll>N</setEmptyStringAll>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>168</xloc>
+      <yloc>496</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
