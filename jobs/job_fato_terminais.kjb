@@ -460,7 +460,6 @@
       <sql>UPDATE dm_financeiro.fato_terminais f
 SET
   ter_qtdEstabTotal             = s.qtdEstabTotal,
-  ter_qtdEstabCapturaManual     = s.qtdEstabCapturaManual,
   ter_qtdEstabCapturaEletronica = s.qtdEstabCapturaEletronica,
   ter_qtdEstabCapturaRemota     = s.qtdEstabCapturaRemota
 FROM dm_financeiro.stg_terminais_estab s

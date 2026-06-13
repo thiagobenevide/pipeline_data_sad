@@ -162,7 +162,6 @@ O modelo segue o padrão **Star Schema** com fato e dimensão no schema `dm_fina
 | `ter_qtdTermPOSchip` | INT | POS com tecnologia chip |
 | `ter_qtdTermPDV` | INT | Quantidade de terminais PDV |
 | `ter_qtdEstabTotal` | INT | Total de estabelecimentos credenciados (via API INFRESTADA) |
-| `ter_qtdEstabCapturaManual` | INT | Estabelecimentos com captura manual |
 | `ter_qtdEstabCapturaEletronica` | INT | Estabelecimentos com captura eletrônica |
 | `ter_qtdEstabCapturaRemota` | INT | Estabelecimentos com captura remota |
 | `s_t_a_m_p` | DATE | Data de carga |
@@ -180,7 +179,6 @@ CREATE TABLE dm_financeiro.stg_terminais_estab (
     ter_sk_tempo              int4,
     ter_sk_local              int4,
     qtdEstabTotal             int4,
-    qtdEstabCapturaManual     int4,
     qtdEstabCapturaEletronica int4,
     qtdEstabCapturaRemota     int4,
     s_t_a_m_p                 date DEFAULT CURRENT_DATE
@@ -210,7 +208,7 @@ Todas as APIs são públicas, sem autenticação, no padrão **OData v4** do BCB
 |---|---|---|
 | `$format` | `json` | Formato da resposta |
 | `$top` | `10000` | Número máximo de registros retornados |
-| `$filter` | `trimestre eq '20241'` | Filtro de seleção |
+| `$filter` | `trimestre eq '20241'` | Filtro de seleção — **só funciona em `Quantidadeetransacoesdecartoes`** (ver nota abaixo) |
 | `$orderby` | `UFTerminal asc` | Ordenação |
 
 **Exemplo de URL completa:**
@@ -218,6 +216,26 @@ Todas as APIs são públicas, sem autenticação, no padrão **OData v4** do BCB
 https://olinda.bcb.gov.br/olinda/servico/MPV_DadosAbertos/versao/v1/odata/
 INFRTERMDA(trimestre=@trimestre)?@trimestre='20241'&$format=json&$top=10000
 ```
+
+> ⚠️ **Comportamento cumulativo do parâmetro `@trimestre`**
+>
+> O parâmetro de função `(trimestre=@trimestre)` **não filtra um único trimestre** — ele
+> retorna o trimestre informado **e todos os posteriores** até o mais recente disponível
+> (ex.: `@trimestre='20191'` traz de 20191 até hoje). Como o pipeline itera período a período,
+> sem recorte cada trimestre seria contado várias vezes (somatórios inflados nas fatos de
+> terminais, staging/inserts duplicados nas demais).
+>
+> O recorte para manter **apenas o trimestre da chamada** depende do endpoint:
+>
+> | Endpoint | `trimestre` | `$filter` no servidor | Estratégia de recorte |
+> |---|---|---|---|
+> | `Quantidadeetransacoesdecartoes` | string | ✅ `$filter=trimestre eq '20241'` | servidor (`dim_cartao`, `fato_transacoes`) |
+> | `PORTADORDA` | int | ❌ HTTP 400 | filtro client-side no PDI (`fato_transacoes_portadorda`) |
+> | `INFRTERMDA` | int | ❌ HTTP 400/500 | filtro client-side no PDI (`fato_terminais`, `dim_local`) |
+> | `INFRESTADA` | int | ❌ HTTP 400 | filtro client-side no PDI (`fato_terminais_estab`) |
+>
+> O filtro client-side é um passo `Filter Rows` (`trimestre = periodo`) logo após o `JSON Input`,
+> mantendo somente as linhas do trimestre solicitado.
 
 ### API IBGE — Enriquecimento Geográfico
 
@@ -254,8 +272,7 @@ pipeline_data_sad/
 │       ├── fato_transacoes.ktr        # Transações — DELETE+INSERT (API principal)
 │       ├── fato_transacoes_portadorda.ktr  # Tarifas/pontos — staging
 │       ├── fato_terminais.ktr         # Terminais POS/PDV — DELETE+INSERT
-│       ├── fato_terminais_estab.ktr   # Estabelecimentos — staging
-│       └── fato_movimentacoes.ktr     # Movimentações financeiras
+│       └── fato_terminais_estab.ktr   # Estabelecimentos — staging
 │
 ├── docker/
 │   ├── data_base.Dockerfile           # Imagem PostgreSQL 18 com dump inicial
@@ -353,8 +370,9 @@ START
   ├─► fato_terminais_estab.ktr
   │     Endpoint: INFRESTADA(trimestre=@trimestre)
   │     Operação: DELETE por trimestre em stg_terminais_estab → INSERT stg
-  │     Campos inseridos: qtdEstabTotal, qtdEstabCapturaManual,
-  │                       qtdEstabCapturaEletronica, qtdEstabCapturaRemota
+  │     Campos inseridos: qtdEstabTotal, qtdEstabCapturaEletronica,
+  │                       qtdEstabCapturaRemota
+  │     (qtdEstabCapturaManual NAO e carregado: o BCB nao publica esse campo — sempre null)
   │     Lookups: dim_local (loc_uf = UFEstabelecimento → loc_sk)
   │              dim_tempo (temp_ano_trimestre = trimestre → tempo_sk)
   │
@@ -362,7 +380,6 @@ START
   │     SQL:
   │       UPDATE dm_financeiro.fato_terminais f
   │       SET ter_qtdEstabTotal             = s.qtdEstabTotal,
-  │           ter_qtdEstabCapturaManual     = s.qtdEstabCapturaManual,
   │           ter_qtdEstabCapturaEletronica = s.qtdEstabCapturaEletronica,
   │           ter_qtdEstabCapturaRemota     = s.qtdEstabCapturaRemota
   │       FROM dm_financeiro.stg_terminais_estab s
